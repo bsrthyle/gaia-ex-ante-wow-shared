@@ -2,8 +2,7 @@
 # ------------------------------------------------------------------------------
 
 # directories
-input_path <- 'D:/# Jvasco/Working Papers/GAIA Guiding Acid Soil Investments/scripts-ex-ante/input-data/'
-output_path <- 'D:/# Jvasco/Working Papers/GAIA Guiding Acid Soil Investments/scripts-ex-ante/output-data/'
+input_path <- paste0(here::here(), '/data-input/')
 
 # ------------------------------------------------------------------------------
 
@@ -13,10 +12,14 @@ sprops_cropland <- sprops_cropland[[c(3,4,5,6,7,1)]]
 names(sprops_cropland) <- c('exch_ac', 'exch_k', 'exch_Ca', 'exch_mg', 'exch_na', 'SBD')  
 
 # acidity saturation
-hp_sat <- terra::rast(paste0(input_path, 'soilgrids_properties_cropland.tif'))
-hp_sat <- hp_sat[[c(10)]]
+hp_sat <- terra::rast(paste0(input_path, 'soilgrids_properties_cropland.tif'))[[c(10)]]
 hp_sat_acid <- terra::classify(hp_sat, rcl=cbind(-1, 10, 0))
 hp_sat_acid <- terra::ifel(hp_sat_acid != 0, 1, hp_sat_acid)
+
+# ------------------------------------------------------------------------------
+# please see reference below for explanation of the different methods
+# kamprath, cochrane, LiTAS (aramburu-merlos)
+# https://www.sciencedirect.com/science/article/pii/S0016706123000988
 
 # ------------------------------------------------------------------------------
 

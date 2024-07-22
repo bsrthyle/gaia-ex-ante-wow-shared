@@ -2,7 +2,7 @@
 # ------------------------------------------------------------------------------
 
 # directories
-input_path <- paste0(here::here(), '/data-input')
+input_path <- paste0(here::here(), '/data-input/')
 
 # ------------------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ terra::writeVector(ssa, paste0(input_path, 'gadm_ssa.gpkg'), overwrite=T)
 # ------------------------------------------------------------------------------ 
 
 # geosurvey
-geosurvey <- geodata::cropland(source='QED', path=paste0(input_path))
+geosurvey <- geodata::cropland(source='QED', path=input_path)
 geosurvey <- terra::crop(x=geosurvey, y=ssa, mask=T)
 m <- c(0, 0.1, NA, 0.1, 1, 1)   
 rclmat <- matrix(m, ncol=3, byrow=TRUE)
@@ -26,9 +26,9 @@ terra::writeRaster(geosurvey, paste0(input_path, 'geosurvey_processed.tif'), ove
 
 # soil properties
 props_d <- lapply(c('BLKD', 'pH', 'acid-exch'), function(sv) {
-  prop5  <- geodata::soil_af(var=sv, depth=5 , path=paste0(input_path, '/soilgrids'))
-  prop15 <- geodata::soil_af(var=sv, depth=15, path=paste0(input_path, '/soilgrids'))
-  prop30 <- geodata::soil_af(var=sv, depth=30, path=paste0(input_path, '/soilgrids'))
+  prop5  <- geodata::soil_af(var=sv, depth=5 , path=paste0(input_path, 'soilgrids'))
+  prop15 <- geodata::soil_af(var=sv, depth=15, path=paste0(input_path, 'soilgrids'))
+  prop30 <- geodata::soil_af(var=sv, depth=30, path=paste0(input_path, 'soilgrids'))
   prop <- (5 * prop5 + 10 * prop15 + 15 * prop30) / 30 
   props <- terra::crop(x=prop, y=ssa, mask=T)
   props})
@@ -38,7 +38,7 @@ props$SBD <- props$SBD / 1000
 
 # exchangeable bases
 bases_d <- lapply(c('K-exch', 'Ca-exch', 'Mg-exch', 'Na-exch'), function(sv) {
-	bases <- geodata::soil_af(var=sv, depth=20 , path=paste0(input_path, '/soilgrids'))
+	bases <- geodata::soil_af(var=sv, depth=20 , path=paste0(input_path, 'soilgrids'))
 	bases <- terra::crop(x=bases, y=ssa, mask=T)
 	bases})
 bases <- terra::rast(bases_d)
