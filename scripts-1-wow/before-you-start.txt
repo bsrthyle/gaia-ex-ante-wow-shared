@@ -1,0 +1,11 @@
+
+structure of input folder:
+
+input-data
+ecocrop_yieldloss
+profit_baseline
+profit_sensitivity
+# ecocrop_parameters_hp_final.xlsx
+AFSIS_ref.xlsx
+FAOSTAT_data_en_4-24-2023.csv	
+	
