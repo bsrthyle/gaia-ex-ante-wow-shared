@@ -2,8 +2,8 @@
 # ------------------------------------------------------------------------------
 
 # directories
-input_path <- 'D:/# Jvasco/Working Papers/GAIA Guiding Acid Soil Investments/scripts-ex-ante/input-data/'
-output_path <- 'D:/# Jvasco/Working Papers/GAIA Guiding Acid Soil Investments/scripts-ex-ante/output-data/'
+input_path <- paste0(here::here(), '/data-input/')
+output_path <- paste0(here::here(), '/data-output/')
 
 # ------------------------------------------------------------------------------
 
@@ -20,19 +20,16 @@ country <- data.frame(iso3 = c('AGO', 'BEN', 'BWA', 'BFA', 'BDI', 'CMR', 'CAF', 
 # ------------------------------------------------------------------------------
 
 # loss
-resp_hp <- terra::rast(Sys.glob(paste0(input_path, 'ecocrop_f/hp_crop_suitability_*_0.tif'))) 
-names(resp_hp) <- gsub("\\_0.tif$", "", basename(terra::sources(resp_hp)))
-names(resp_hp) <- gsub("hp_crop_suitability_", "", names(resp_hp))
+resp_hp <- terra::rast(Sys.glob(paste0(input_path, 'ecocrop_yieldloss/hp_crop_suitability_*_0.tif'))) 
+names(resp_hp) <- gsub("_hp", "", names(resp_hp))
 resp_hp <- terra::aggregate(resp_hp, 10, fun='mean', na.rm=T)
-resp_ph <- terra::rast(Sys.glob(paste0(input_path, 'ecocrop_f/ph_crop_suitability_*_0.tif')))
-names(resp_ph) <- gsub("\\_0.tif$", "", basename(terra::sources(resp_ph)))
-names(resp_ph) <- gsub("ph_extra_production_", "", names(resp_ph))
+resp_ph <- terra::rast(Sys.glob(paste0(input_path, 'ecocrop_yieldloss/ph_crop_suitability_*_0.tif')))
+names(resp_ph) <- gsub("_ph", "", names(resp_ph))
 resp_ph <- terra::aggregate(resp_ph, 10, fun='mean', na.rm=T)
 
 # yield
 crop_yield <- terra::rast(paste0(input_path, "spam_yield_processed.tif")) / 1000
 crop_area <- terra::rast(paste0(input_path, "spam_harv_area_processed.tif"))
-names(crop_area) <- paste0(names(crop_area), '_ha')
 
 # price
 fao_price <- read.csv(paste0(input_path, 'FAOSTAT_data_en_4-24-2023.csv'))
@@ -53,7 +50,7 @@ soil <- terra::aggregate(terra::rast(paste0(input_path, 'soilgrids_properties_al
 lr <- function(crop, lime_method) {
   c_subset <- crops_df[crops_df$spam == crop,]
   lime_tha <- lime_method[[grep(paste0("_", c_subset$ac_sat), names(lime_method))]]
-  area <- crop_area[[paste0(crop, '_ha')]]
+  area <- crop_area[[crop]]
   area <- terra::ifel(area > 0, 1, NA)
   soil_hp <- terra::ifel(soil$hp_sat > c_subset$ac_sat, 1, NA)
   lime_tha <- lime_tha * soil_hp * area
@@ -78,7 +75,7 @@ returns <- function(crop, yield_resp, crop_price, yield_f){
   return_usha <- yield_resp_tha * crop_price
   names(return_usha) <- paste0(crop, '_return_usha')
   return(c(actual_yield, yield_loss, yield_resp_tha, return_usha))
-  }
+}
 
 # costs (year 1)
 costs <- function(crop, lime_method, lime_price) {
@@ -88,8 +85,8 @@ costs <- function(crop, lime_method, lime_price) {
   names(lime_tha) <- paste0(crop, '_lr_tha')
   lime_usha <- lime_tha * lime_price
   names(lime_usha) <- paste0(crop, '_cost_usha')
-  return(lime_usha)
-  }
+  return(c(lime_tha, lime_usha))
+}
 
 # number of years
 nyears_f <- function(crop, lime_year1, lime_maint){
@@ -100,10 +97,10 @@ nyears_f <- function(crop, lime_year1, lime_maint){
   lime_m <- lime_maint[[crop]]
   nyears <- round(lime_1/lime_m, 0); names(nyears) <- 'nyears'
   return(nyears)
-  }
+}
 
 # profitability
-profit <- function(crop, yield_resp, yf, crop_price, returns_f=c('year1', 'npv', 'equilibrium'), lime_method, lime_m_method, lime_price, nyrs){
+profit <- function(crop, yield_resp, yf, crop_price, returns_f=c('year1', 'npv', 'equilibrium'), discount_rate, lime_method, lime_m_method, lime_price, nyrs){
   if(returns_f == 'year1'){                                         
     # year 1 return & year 1 cost
     return <- returns(crop, yield_resp, yield_f=yf, crop_price)  
@@ -111,7 +108,7 @@ profit <- function(crop, yield_resp, yf, crop_price, returns_f=c('year1', 'npv',
   } else if(returns_f == 'npv'){                                    
     # npv return & year 1 cost
     return_1 <- returns(crop, yield_resp, yield_f=yf, crop_price) # output not as per returns() function
-    return <- limer::NPV_lime(return_1[[paste0(crop, "_return_usha")]], nyears=nyrs, discount_rate=10)   
+    return <- limer::NPV_lime(return_1[[paste0(crop, "_return_usha")]], nyears=nyrs, discount_rate=discount_rate)   
     names(return) <- paste0(crop, "_return_usha")
     cost <- costs(crop, lime_method, lime_price)           
   } else if(returns_f == 'equilibrium'){                             
@@ -119,90 +116,58 @@ profit <- function(crop, yield_resp, yf, crop_price, returns_f=c('year1', 'npv',
     return <- returns(crop, yield_resp, yield_f=yf, crop_price)
     cost <- costs(crop, lime_m_method, lime_price)           
   }
-  gm <- return[[paste0(crop, "_return_usha")]] - cost; names(gm) <- paste0(crop, '_gm_usha')
-  roi <- return[[paste0(crop, "_return_usha")]] / cost; names(roi) <- paste0(crop, '_roi_usha')
+  gm <- return[[paste0(crop, "_return_usha")]] - cost[[paste0(crop, "_cost_usha")]]; names(gm) <- paste0(crop, '_gm_usha')
+  roi <- return[[paste0(crop, "_return_usha")]] / cost[[paste0(crop, "_cost_usha")]]; names(roi) <- paste0(crop, '_roi_usha')
   return(c(return, cost, gm, roi))
-  }
+}
 
 # ------------------------------------------------------------------------------
 
-# sensitivity to prices
-prices <- expand.grid(c_price=seq(0.1, 2, 0.1), l_price=seq(0, 2, 0.1))
-output <- data.frame(rel_price=rep(NA, nrow(crops_df)*nrow(prices)), crop=NA, gm_sum=NA, ha_sum=NA)
-for(r_f in c('year1', 'npv', 'equilibrium')){
-  print(r_f)
-  j <- 1
-  for(crop in unique(crops_df$spam)){
-    print(crop)
-    area_ha <- crop_area[[paste0(crop, '_ha')]]
-    price_ust <- crop_price[crop_price$crop==crop,]$x
-    for(i in 1:nrow(prices)){
-      print(i)
-      p <- prices[i,]    
-      # economics
-      c_price <- price_ust * p$c_price
-      l_price <- 100 * p$l_price
+# run profitability 
+profit_calc <- function(profit_type='year1', cprice_factor=1, yield_factor=1, lime_price=100, discount_rate=0.1){
+  # profit_type = c('year1', npv', 'equilibrium)
+  for(r_f in profit_type){
+    print(r_f)
+    for(crop in unique(crops_df$spam)){
+      print(crop)
+      filename <- paste0(input_path, 'profit_sensitivity/', crop, '_', r_f, '_yield_', yield_factor, '_cprice_', cprice_factor, '_lprice_', lime_price, '_discrate_', discount_rate, '.tif')
+      area_ha <- crop_area[[crop]]
+      c_price <- crop_price[crop_price$crop==crop,]$x * cprice_factor
       c_nyrs <- nyears_f(crop, lr_crops, lr_m_crops)
       if(r_f == 'npv'){                                         
-        crop1 <- profit(returns_f=r_f, crop, yield_resp=resp_hp, yf=1, crop_price=c_price, lime_method=lr_crops, nyrs=c_nyrs, lime_price=l_price) 
+        crop1 <- profit(returns_f=r_f, crop, yield_resp=resp_hp, yf=yield_factor, crop_price=c_price, discount_rate=discount_rate, lime_method=lr_crops, nyrs=c_nyrs, lime_price=lime_price) 
       } else{
-        crop1 <- profit(returns_f=r_f, crop, yield_resp=resp_hp, yf=1, crop_price=c_price, lime_method=lr_crops, lime_m_method=lr_m_crops, lime_price=l_price) 
+        crop1 <- profit(returns_f=r_f, crop, yield_resp=resp_hp, yf=yield_factor, crop_price=c_price, discount_rate=discount_rate, lime_method=lr_crops, lime_m_method=lr_m_crops, lime_price=lime_price) 
       }
       crop2 <- c(area_ha, crop1)
-      # summary gm
-      gm <- crop2[[c(grep('_ha', names(crop2)), grep('_gm_usha', names(crop2)))]]
-      gm[[2]] <- terra::ifel(gm[[2]] <= 0, NA, gm[[2]])
-      gm_sum <- terra::global(gm[[2]], sum, na.rm=T)$sum
-      # summary Ha
-      gm_mask <- terra::ifel(gm[[2]] <= 0, NA, 1) 
-      ha <- gm[[1]] * gm_mask
-      ha_sum <- terra::global(ha, sum, na.rm=T)$sum
-      # output
-      output[j,] <- cbind(rel_price=i, crop=crop, gm_sum=round(gm_sum,2), ha_sum=round(ha_sum,2))
-      j <- j + 1
-      }
+      terra::writeRaster(crop2, filename, overwrite=T)
     }
-  write.csv(output, paste0(output_path, '/output-sensitivity-analysis-prices-', r_f, '.csv'))
-  }
+  }  
+}
 
 # ------------------------------------------------------------------------------
 
-# sensitivity to yields
-yld <- seq(1, 2.5, 0.1)
-output <- data.frame(yield_f=rep(NA, length(yld)), crop=NA, gm_sum=NA, ha_sum=NA)
-for(r_f in c('year1', 'npv', 'equilibrium')){
-  print(r_f)
-  j <- 1
-  for(crop in unique(crops_df$spam)){
-    print(crop)
-    area_ha <- crop_area[[paste0(crop, '_ha')]]
-    price_ust <- crop_price[crop_price$crop==crop,]$x
-    for(i in unique(yld)){
-      print(i)
-      # economics
-      c_price <- price_ust
-      l_price <- 100
-      c_nyrs <- nyears_f(crop, lr_crops, lr_m_crops)
-      if(r_f == 'npv'){                                         
-        crop1 <- profit(returns_f=r_f, crop, yield_resp=resp_hp, yf=i, crop_price=c_price, lime_method=lr_crops, nyrs=c_nyrs, lime_price=l_price) 
-      } else{
-        crop1 <- profit(returns_f=r_f, crop, yield_resp=resp_hp, yf=i, crop_price=c_price, lime_method=lr_crops, lime_m_method=lr_m_crops, lime_price=l_price) 
-      }
-      crop2 <- c(area_ha, crop1)
-      # summary gm
-      gm <- crop2[[c(grep('_ha', names(crop2)), grep('_gm_usha', names(crop2)))]]
-      gm[[2]] <- terra::ifel(gm[[2]] <= 0, NA, gm[[2]]) 
-      gm_sum <- terra::global(gm[[2]], sum, na.rm=T)$sum
-      # summary area
-      gm_mask <- terra::ifel(gm[[2]] <= 0, NA, 1) 
-      ha <- gm[[1]] * gm_mask
-      ha_sum <- terra::global(ha, sum, na.rm=T)$sum
-      # output
-      output[j,] <- cbind(yield_f=i, crop=crop, gm_sum=round(gm_sum,2), ha_sum=round(ha_sum,2))
-      j <- j + 1
-      }
-    }
-  write.csv(output, paste0(output_path, '/output-sensitivity-analysis-yields-', r_f, '.csv'))
+# user defined parameters
+ya <- seq(1, 2, 0.5)
+cp <- 1
+lp <- seq(0, 100, 50)
+dr <- seq(0.1, 0.3, 2)
+
+# run sensitivity analysis
+params <- expand.grid(ya=ya, cp=cp, lp=lp, dr=dr)
+for(i in 1:nrow(params)){
+  p <- params[i,]    
+  profit_calc(profit_type='year1', yield_factor=p$ya, cprice_factor=p$cp, lime_price=p$lp, discount_rate=p$dr)
   }
+
+# example to load respective rasters
+yf1 <- terra::rast(Sys.glob(paste0(input_path, 'profit_sensitivity/*_year1_yield_1_cprice_1_lprice_100_discrate_0.1.tif')))
+yf1 <- yf1[[grep('_gm_usha', names(yf1))]]
+yf1 <- terra::mean(yf1, na.rm=T); names(yf1) <- 'yf1'
+yf2 <- terra::rast(Sys.glob(paste0(input_path, 'profit_sensitivity/*_year1_yield_2_cprice_1_lprice_100_discrate_0.1.tif')))
+yf2 <- yf2[[grep('_gm_usha', names(yf2))]]
+yf2 <- terra::mean(yf2, na.rm=T); names(yf2) <- 'yf2'
+yf <- c(yf1, yf2)
+terra::plot(yf)
 
 # ------------------------------------------------------------------------------

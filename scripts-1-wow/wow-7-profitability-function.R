@@ -2,8 +2,8 @@
 # ------------------------------------------------------------------------------
 
 # directories
-input_path <- 'D:/# Jvasco/Working Papers/GAIA Guiding Acid Soil Investments/scripts-ex-ante/input-data/'
-output_path <- 'D:/# Jvasco/Working Papers/GAIA Guiding Acid Soil Investments/scripts-ex-ante/output-data/'
+input_path <- paste0(here::here(), '/data-input/')
+output_path <- paste0(here::here(), '/data-output/')
 
 # ------------------------------------------------------------------------------
 
@@ -20,19 +20,16 @@ country <- data.frame(iso3 = c('AGO', 'BEN', 'BWA', 'BFA', 'BDI', 'CMR', 'CAF', 
 # ------------------------------------------------------------------------------
 
 # loss
-resp_hp <- terra::rast(Sys.glob(paste0(input_path, 'ecocrop_f/hp_crop_suitability_*_0.tif'))) 
-names(resp_hp) <- gsub("\\_0.tif$", "", basename(terra::sources(resp_hp)))
-names(resp_hp) <- gsub("hp_crop_suitability_", "", names(resp_hp))
+resp_hp <- terra::rast(Sys.glob(paste0(input_path, 'ecocrop_yieldloss/hp_crop_suitability_*_0.tif'))) 
+names(resp_hp) <- gsub("_hp", "", names(resp_hp))
 resp_hp <- terra::aggregate(resp_hp, 10, fun='mean', na.rm=T)
-resp_ph <- terra::rast(Sys.glob(paste0(input_path, 'ecocrop_f/ph_crop_suitability_*_0.tif')))
-names(resp_ph) <- gsub("\\_0.tif$", "", basename(terra::sources(resp_ph)))
-names(resp_ph) <- gsub("ph_extra_production_", "", names(resp_ph))
+resp_ph <- terra::rast(Sys.glob(paste0(input_path, 'ecocrop_yieldloss/ph_crop_suitability_*_0.tif')))
+names(resp_ph) <- gsub("_ph", "", names(resp_ph))
 resp_ph <- terra::aggregate(resp_ph, 10, fun='mean', na.rm=T)
 
 # yield
 crop_yield <- terra::rast(paste0(input_path, "spam_yield_processed.tif")) / 1000
 crop_area <- terra::rast(paste0(input_path, "spam_harv_area_processed.tif"))
-names(crop_area) <- paste0(names(crop_area), '_ha')
 
 # price
 fao_price <- read.csv(paste0(input_path, 'FAOSTAT_data_en_4-24-2023.csv'))
@@ -53,7 +50,7 @@ soil <- terra::aggregate(terra::rast(paste0(input_path, 'soilgrids_properties_al
 lr <- function(crop, lime_method) {
   c_subset <- crops_df[crops_df$spam == crop,]
   lime_tha <- lime_method[[grep(paste0("_", c_subset$ac_sat), names(lime_method))]]
-  area <- crop_area[[paste0(crop, '_ha')]]
+  area <- crop_area[[crop]]
   area <- terra::ifel(area > 0, 1, NA)
   soil_hp <- terra::ifel(soil$hp_sat > c_subset$ac_sat, 1, NA)
   lime_tha <- lime_tha * soil_hp * area
@@ -82,14 +79,12 @@ returns <- function(crop, yield_resp, crop_price, yield_f){
 
 # costs (year 1)
 costs <- function(crop, lime_method, lime_price) {
-  # c_subset <- subset(crops_df, spam == crop) 
-  # lime_tha <- lime_method[[grep(paste0("_", c_subset$ac_sat), names(lime_method))]]
   lime_tha <- lime_method[[crop]]
   names(lime_tha) <- paste0(crop, '_lr_tha')
   lime_usha <- lime_tha * lime_price
   names(lime_usha) <- paste0(crop, '_cost_usha')
-  return(lime_usha)
-}
+  return(c(lime_tha, lime_usha))
+  }
 
 # number of years
 nyears_f <- function(crop, lime_year1, lime_maint){
@@ -101,9 +96,9 @@ nyears_f <- function(crop, lime_year1, lime_maint){
   nyears <- round(lime_1/lime_m, 0); names(nyears) <- 'nyears'
   return(nyears)
   }
- 
+
 # profitability
-profit <- function(crop, yield_resp, yf, crop_price, returns_f=c('year1', 'npv', 'equilibrium'), lime_method, lime_m_method, lime_price, nyrs){
+profit <- function(crop, yield_resp, yf, crop_price, returns_f=c('year1', 'npv', 'equilibrium'), discount_rate, lime_method, lime_m_method, lime_price, nyrs){
   if(returns_f == 'year1'){                                         
     # year 1 return & year 1 cost
     return <- returns(crop, yield_resp, yield_f=yf, crop_price)  
@@ -111,7 +106,7 @@ profit <- function(crop, yield_resp, yf, crop_price, returns_f=c('year1', 'npv',
   } else if(returns_f == 'npv'){                                    
     # npv return & year 1 cost
     return_1 <- returns(crop, yield_resp, yield_f=yf, crop_price) # output not as per returns() function
-    return <- limer::NPV_lime(return_1[[paste0(crop, "_return_usha")]], nyears=nyrs, discount_rate=10)   
+    return <- limer::NPV_lime(return_1[[paste0(crop, "_return_usha")]], nyears=nyrs, discount_rate=discount_rate)   
     names(return) <- paste0(crop, "_return_usha")
     cost <- costs(crop, lime_method, lime_price)           
   } else if(returns_f == 'equilibrium'){                             
@@ -119,28 +114,29 @@ profit <- function(crop, yield_resp, yf, crop_price, returns_f=c('year1', 'npv',
     return <- returns(crop, yield_resp, yield_f=yf, crop_price)
     cost <- costs(crop, lime_m_method, lime_price)           
   }
-  gm <- return[[paste0(crop, "_return_usha")]] - cost; names(gm) <- paste0(crop, '_gm_usha')
-  roi <- return[[paste0(crop, "_return_usha")]] / cost; names(roi) <- paste0(crop, '_roi_usha')
+  gm <- return[[paste0(crop, "_return_usha")]] - cost[[paste0(crop, "_cost_usha")]]; names(gm) <- paste0(crop, '_gm_usha')
+  roi <- return[[paste0(crop, "_return_usha")]] / cost[[paste0(crop, "_cost_usha")]]; names(roi) <- paste0(crop, '_roi_usha')
   return(c(return, cost, gm, roi))
   }
 
 # ------------------------------------------------------------------------------
 
-# profitability
+# profitability -- for loop
 for(r_f in c('year1', 'npv', 'equilibrium')){
   print(r_f)
   for(crop in unique(crops_df$spam)){
     print(crop)
-    area_ha <- crop_area[[paste0(crop, '_ha')]]
+    area_ha <- crop_area[[crop]]
     c_price <- crop_price[crop_price$crop==crop,]$x
     c_nyrs <- nyears_f(crop, lr_crops, lr_m_crops)
     if(r_f == 'npv'){                                         
-      crop1 <- profit(returns_f=r_f, crop, yield_resp=resp_hp, yf=1, crop_price=c_price, lime_method=lr_crops, nyrs=c_nyrs, lime_price=100) 
+      crop1 <- profit(returns_f=r_f, crop, yield_resp=resp_hp, yf=1, crop_price=c_price, discount_rate=0.10, lime_method=lr_crops, nyrs=c_nyrs, lime_price=100) 
     } else{
-      crop1 <- profit(returns_f=r_f, crop, yield_resp=resp_hp, yf=1, crop_price=c_price, lime_method=lr_crops, lime_m_method=lr_m_crops, lime_price=100) 
+      
+      crop1 <- profit(returns_f=r_f, crop, yield_resp=resp_hp, yf=1, crop_price=c_price, discount_rate=0.10, lime_method=lr_crops, lime_m_method=lr_m_crops, lime_price=100) 
     }
     crop2 <- c(area_ha, crop1)
-    terra::writeRaster(crop2, paste0(input_path, 'economics_f/', crop, '_', r_f, '.tif'), overwrite=T)
+    terra::writeRaster(crop2, paste0(input_path, 'profit_baseline/', crop, '_', r_f, '.tif'), overwrite=T)
     }
   }
 
