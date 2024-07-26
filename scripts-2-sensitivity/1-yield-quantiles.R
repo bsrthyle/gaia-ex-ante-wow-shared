@@ -9,9 +9,10 @@ yield_quantiles <- function(crop, sd_f, quantiles, n_samples){
   crop_yield <- spam_yield[[crop]] 
   names(crop_yield) <- 'spam'
   crop_yield$sd <- terra::ifel(crop_yield$spam > 0, sd_f * terra::global(crop_yield, fun='sd', na.rm=T)$sd, NA)
+  max_crop_yield <- terra::global(crop_yield$spam, max, na.rm=T)$max
   # fit and truncate distribution
   gauss_dist <- terra::as.data.frame(crop_yield, xy=T)
-  gauss_dist$fitted <- lapply(seq_len(nrow(gauss_dist)), function(i) { truncnorm::rtruncnorm(n=n_samples, a=0, b=terra::global(crop_yield$spam, max, na.rm=T)$max, mean=gauss_dist$spam[i], sd=gauss_dist$sd[i]) })
+  gauss_dist$fitted <- lapply(seq_len(nrow(gauss_dist)), function(i) { truncnorm::rtruncnorm(n=n_samples, a=0, b=max_crop_yield, mean=gauss_dist$spam[i], sd=gauss_dist$sd[i]) })
   gauss_dist$q <- lapply(gauss_dist$fitted, function(x) quantile(x, quantiles))
   # final data frame
   gauss_dist <- tidyr::unnest_wider(gauss_dist, col=q, names_sep='')

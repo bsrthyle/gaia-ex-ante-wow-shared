@@ -163,27 +163,6 @@ for(i in 1:nrow(params)){
   profit_calc(profit_type='year1', yield_factor=p$ya, cprice_factor=p$cp, lime_price=p$lp, discount_rate=p$dr)
   }
 
-
-# ... post-processing ...
-
-q10 <- terra::rast(Sys.glob(paste0(input_path, 'profit_sensitivity/*_q10_year1_yield_1_cprice_1_lprice_100_discrate_0.1.tif')))
-q90 <- terra::rast(Sys.glob(paste0(input_path, 'profit_sensitivity/*_q90_year1_yield_1_cprice_1_lprice_100_discrate_0.1.tif')))
-
-q10 <- q10[[c('MAIZ', 'MAIZ_gm_usha')]]
-q10$profit_class <- terra::ifel(q10$MAIZ_gm_usha <= 0, 0, 1)
-q10$area_prof <- q10$MAIZ * 0.1 * q10$profit_class
-
-q90 <- q90[[c('MAIZ', 'MAIZ_gm_usha')]]
-q90$profit_class <- terra::ifel(q90$MAIZ_gm_usha <= 0, 0, 1)
-q90$area_prof <- q90$MAIZ * 0.1 * q90$profit_class
-
-
-names(q10)
-par(mfrow=c(1,2))
-terra::plot(q10$area_prof)
-terra::plot(q90$area_prof)
-
-
 # example to load respective rasters
 # yf1 <- terra::rast(Sys.glob(paste0(input_path, 'profit_sensitivity/*_year1_yield_1_cprice_1_lprice_100_discrate_0.1.tif')))
 # yf1 <- yf1[[grep('_gm_usha', names(yf1))]]
