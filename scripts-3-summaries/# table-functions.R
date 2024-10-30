@@ -45,11 +45,11 @@ assemble_lyrs <- function(var, is_usd=F, is_profitable=F){
 summary_f <- function(country_iso3, var_rast, unit, select_admin){
   folder_name <- ifelse(unit=='_ha', 'acidic-cropland', 
                         ifelse(unit=='_add_t', 'additional-production', 
-                          ifelse(unit=='_curr_t', 'current-production', 
-                            ifelse(unit=='_add_usd', 'additional-value',
-                              ifelse(unit=='_curr_usd', 'current-value', 
-                                ifelse(unit=='_add_t_profit', 'additional-production-profitable',
-                                  ifelse(unit=='_add_usd_profit', 'additional-value-profitable', 'lime-requirements')))))))
+                               ifelse(unit=='_curr_t', 'current-production', 
+                                      ifelse(unit=='_add_usd', 'additional-value',
+                                             ifelse(unit=='_curr_usd', 'current-value', 
+                                                    ifelse(unit=='_add_t_profit', 'additional-production-profitable',
+                                                           ifelse(unit=='_add_usd_profit', 'additional-value-profitable', 'lime-requirements')))))))
   # select variable
   l_ph_h_hp_crop <- var_rast * l_ph_h_hp; names(l_ph_h_hp_crop) <- paste0(names(l_ph_h_hp_crop), '_l_ph_h_hp')
   l_ph_l_hp_crop <- var_rast * l_ph_l_hp; names(l_ph_l_hp_crop) <- paste0(names(l_ph_l_hp_crop), '_l_ph_l_hp')
@@ -129,14 +129,79 @@ master_f <- function(country_iso3, select_admin, var, is_usd, is_profitable){
   } else{
     unit <- 'no_unit'
     print("no combination possible")
-
+    
   }
   
   if(unit != 'no_unit'){
     raster_layers <- terra::rast(assemble_lyrs(var=var, is_usd=is_usd, is_profitable=is_profitable))
     final_table <- summary_f(var_rast=raster_layers, country_iso3=country_iso3, select_admin=select_admin, unit=unit)
     return(final_table) }
+}
+
+# ------------------------------------------------------------------------------
+# Function to extract profitable areas per crop and admin unit
+# ------------------------------------------------------------------------------
+
+extract_profit <- function(country_iso3, select_admin, save_map=T){
+
+  profitable_raster_ori <- terra::rast(Sys.glob(paste0(output_path, 'crop-rasters-final/*_profit_rasters.tif')))
+  # Exclude raster names containing '_area_profitable_perc'
+  profitable_raster <- profitable_raster_ori[[grep('_area_profitable_perc', names(profitable_raster_ori), invert = TRUE)]]
+  cty <- geodata::gadm(country_iso3, level=2, path=input_path)
+  interest_var <- terra::extract(profitable_raster, cty, fun=sum, na.rm=T, ID=F)
+  
+  interest_var[is.na(interest_var)] <- 0
+  interest_var$total_cropland <- round(rowSums(interest_var[grep("_ha_spam", names(interest_var))], na.rm=T), 2)
+  interest_var$total_profitable <- round(rowSums(interest_var[grep("_area_profitable_ha", names(interest_var))], na.rm=T), 2)
+  interest_var$actutal_profit <- round(rowSums(interest_var[grep("_actual_profit", names(interest_var))], na.rm=T),2)
+  interest_var <- cbind(data.frame(cty[c('COUNTRY', 'NAME_1', 'NAME_2')]), interest_var)
+  
+  if(select_admin=="admin1"){
+    interest_var <- aggregate(interest_var[c(4:ncol(interest_var))], by=list('COUNTRY'=interest_var$COUNTRY, 'NAME_1'=interest_var$NAME_1), FUN=sum)
   }
+  
+  # full country name from ISO3
+  country_name <- countrycode::countrycode(country_iso3, origin = "iso3c", destination = "country.name")
+  
+  # collapse shapefile by NAME_1
+  
+  
+  
+  if(save_map==T){
+    cty_1 <- geodata::gadm(country_iso3, level=1, path=input_path)
+    all_crops_ha <- profitable_raster_ori[[grep('_ha_spam', names(profitable_raster_ori))]]
+    all_crops_ha <- sum(all_crops_ha, na.rm=T)
+    all_crops_ha_profit <- profitable_raster_ori[[grep('area_profitable_ha', names(profitable_raster_ori))]]
+    all_crops_ha_profit <- sum(all_crops_ha_profit, na.rm=T)
+    a_p <- 100 * all_crops_ha_profit / all_crops_ha
+    # crop by cty
+    a_p <- terra::crop(a_p, cty, mask=TRUE)
+    all_crops_ha <- profitable_raster_ori[[grep('_ha_spam', names(profitable_raster_ori))]]
+    all_crops_gm <- profitable_raster_ori[[grep('actual_profit', names(profitable_raster_ori))]]
+    w_p <- terra::weighted.mean(all_crops_gm, all_crops_ha, na.rm=T)
+    
+    w_p <- terra::crop(w_p, cty, mask=TRUE)
+    # save plot
+    
+    png(filename = paste0(output_path, 'new-profitable-production/', country_iso3, ".png") , 
+        width = 800, height = 400, res = 96, type = "cairo")
+    par(mfrow=c(1,2))
+    terra::plot(a_p, main=paste0('Total profitable area (%) for-', country_name ), breaks=c(0,20,40,60,80,100))
+    terra::plot(cty_1, add = TRUE, border = 'grey', alpha=0.3, lwd =0.3)  # Overlay boundary in red
+    terra::plot(w_p, main=paste0('Weighted profit (USD/ha) for-', country_name ), breaks=c(0,50,100,200,300,400,500,Inf))
+    terra::plot(cty_1, add = TRUE, border = 'grey', alpha=0.3, lwd =0.3)  # Overlay boundary in red
+    dev.off()
+    
+  }
+  
+  
+  
+  write.csv(interest_var, paste0(output_path, 'new-profitable-production/', country_iso3, '-', select_admin, ".csv"), row.names=T)
+  
+}
+
+
+
 
 # ------------------------------------------------------------------------------
 # the end

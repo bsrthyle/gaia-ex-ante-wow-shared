@@ -1,0 +1,303 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beamer Presentation
+% LaTeX Template
+% Version 1.0 (10/11/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND THEMES
+%----------------------------------------------------------------------------------------
+ 
+\documentclass[xcolor=table, aspectratio=1610]{beamer}
+
+\usetheme[]{Montpellier}
+
+
+\setbeamertemplate{itemize items}[square]
+\setbeamertemplate{section in toc}[sections numbered]
+
+% Center the frame title
+\setbeamertemplate{frametitle}{
+    \begin{centering}
+        %\vskip1em
+        \small\textsc{\insertframetitle}\par
+        %\vskip{0em}
+    \end{centering}
+}
+% Define your green colors
+\definecolor{mygreen}{RGB}{118, 188, 33} % Adjust RGB values as needed
+\definecolor{mylightgreen}{RGB}{144,238,144}
+
+% Apply the new colors to the Antibes theme
+\setbeamercolor*{palette primary}{bg=mygreen!70, fg=white}
+\setbeamercolor*{palette secondary}{bg=mygreen!1, fg=black}
+\setbeamercolor*{palette tertiary}{bg=mygreen!1, fg=black}
+\setbeamercolor*{palette quaternary}{bg=mygreen!85, fg=white}
+
+% If you want to customize block colors
+\setbeamercolor{block title}{bg=mygreen, fg=white}
+\setbeamercolor{block body}{bg=mylightgreen, fg=black}
+\setbeamertemplate{title page}[default][rounded=false]
+%\usepackage{ilr-latex-beamer}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{multirow}
+\usepackage{multicol}
+%\usepackage[sfdefault]{universalis} 
+\usepackage{fouriernc}
+%\usepackage[T1]{fontenc}
+% Make hyperlinks blue
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue,
+    citecolor=blue
+}
+\usetikzlibrary{arrows,calc}
+\usepackage{relsize}
+
+%\titlegraphic{\hspace*{-10mm}\vspace*{-8mm}\includegraphics[width=12.8cm, height=3cm]{bonn2.png}}
+%\pgfdeclareimage[height=.5cm]{logoUni}{logo2.png}
+%\logo{\pgfuseimage{logoUni}}
+%--------------------------
+
+\makeatletter
+% Define custom colors
+\usepackage{xcolor}
+\definecolor{customtitlebg}{RGB}{230, 230, 250}
+\definecolor{customauthorbg}{RGB}{245, 245, 220}
+\definecolor{customdatebg}{RGB}{240, 255, 240}
+
+% Set beamer color for title, author, and date
+\setbeamercolor{title}{bg=mygreen, fg=white}
+%\setbeamercolor{author}{bg=customauthorbg, fg=black}
+%\setbeamercolor{date}{bg=customdatebg, fg=black}
+
+% Define a custom title page template
+\makeatletter
+\defbeamertemplate*{title page}{custom}
+{
+  \vbox{}
+  \vfill
+  \begin{centering}
+    \begin{beamercolorbox}[sep=14pt,rounded=false, shadow=true, wd=\textwidth, center]{title}
+      \usebeamerfont{title}\inserttitle\par%
+      \ifx\insertsubtitle\@empty%
+      \else%
+        \vskip0.25em%
+        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle}%
+        \par%
+      \fi%
+    \end{beamercolorbox}%
+    \vskip1em\par%
+    \begin{beamercolorbox}[sep=8pt,center]{author}
+      \usebeamerfont{author}\insertauthor
+      {
+
+
+\vspace{80pt}
+\vspace{\fill}
+\footnotesize{Last Updated: \today} %Date, can be changed to a custom date
+}
+    \end{beamercolorbox}
+    \vskip1em\par%
+    \begin{beamercolorbox}[sep=8pt,center]{date}
+      \usebeamerfont{date}
+    \end{beamercolorbox}%
+    \vfill
+  \end{centering}
+}
+\makeatother
+\useinnertheme{rounded}
+% Set the custom title page as the default
+\setbeamertemplate{title page}[custom]
+
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+%\logo{ \includegraphics[width=5cm,height=5cm,keepaspectratio]{air-header.png}}
+\title[KENYA-Summary]{\textsf{Summary Data on Acid Cropland and Lime Requirements in Kenya}} % The short title appears at the bottom of every slide, the full title is only on the title page
+%\subtitle{Your subtitle here}
+\author[GAIA]{GAIA\\ \href{www.acidsoils.africa}{www.acidsoils.africa} } % Your name
+\institute[CIMMYT] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
+
+\date{}
+ % add last updated date including the text "Last Updated:"
+
+
+\begin{document}
+
+\begin{frame}[plain]
+\textsc{\titlepage} % Print the title page as the first slide
+\end{frame}
+
+\begin{frame}
+\frametitle{Outlook} % Table of contents slide, comment this block out to remove it
+\tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
+\end{frame}
+
+\section{Introduction}
+
+
+
+
+%----------------------------------------------------------------------------------------
+%	PRESENTATION SLIDES
+%----------------------------------------------------------------------------------------
+
+\section{Acidic Cropland}
+\subsection*{Top 10 counties in Kenya with the highest acidic cropland}
+
+
+\begin{frame}{Top 10 counties in Kenya with the highest acidic cropland}
+    
+        \begin{figure}
+        \includegraphics[width=0.85\textwidth, height=0.80\textheight]{../../data-output/figures_and_tables/KEN_plt_acidic_cropland.png}
+       
+        \end{figure}
+        
+   
+
+\end{frame}
+
+\subsection*{Top 10 counties in Kenya with the highest acidic cropland (Percentage of total cropland)}
+
+\begin{frame}{Top 10 counties in Kenya with the highest acidic cropland (Percentage of total cropland)}
+    
+        \begin{figure}
+        \includegraphics[width=0.85\textwidth, height=0.80\textheight]{../../data-output/figures_and_tables/KEN_plt_acidic_cropland_per.png}
+       
+        \end{figure}
+
+\end{frame}
+
+\section*{Total crop area distribution (ha)}
+\subsection*{Total crop area in the top-10 most acidic counties, not segregated by acidic cropland}
+
+\begin{frame}{Total crop area in the top-10 most acidic counties, not segregated by acidic cropland}
+
+    
+            \begin{center}
+                \includegraphics[scale=0.45]{../../data-output/figures_and_tables/KEN_plt_crop_area_acidic.png}
+             \end{center}
+        
+\end{frame}
+
+\begin{frame}
+    \scriptsize
+    \input{../../data-output/figures_and_tables/KEN_table_crop_area_acidic.tex}
+\end{frame}
+
+\section{Yield Loss}
+\subsection*{Yield loss for Maize and Beans (\%) in Kenya}
+\begin{frame}{Yield loss due to soil acidity for Maize and Beans in Kenya}
+            
+           \begin{figure}
+           \includegraphics[width=\textwidth]{../../data-output/figures_and_tables/KEN_yield_loss__2.png}
+          
+           \end{figure}
+\end{frame}
+
+\section{Lime Requirement}
+\subsection*{Lime requirements (t) for acid soil remediation}
+
+\begin{frame} {Lime requirements (t) for acid soil remediation in Kenya}
+    
+        \begin{figure}
+                \centering
+        \includegraphics[scale=0.45]{../../data-output/figures_and_tables/KEN_plt_lime_requirements.png}
+       
+        \end{figure}
+
+\end{frame}
+
+\subsection*{Lime requirements (t) for acid soil remediation (table)}
+\begin{frame} {Lime requirements (t) for acid soil remediation in Kenya (table)}
+    \scriptsize
+    \input{../../data-output/figures_and_tables/KEN_table_lime_requirements.tex}
+
+\end{frame}
+
+\subsection*{Lime rate for Maize and Beans in Kenya}
+\begin{frame} {Lime rate for Maize and Beans in Kenya}
+        \begin{figure}
+                \centering
+        \includegraphics[width=\textwidth]{../../data-output/figures_and_tables/KEN_lime_rate_.png}
+       
+        \end{figure}
+
+\end{frame}
+\section{Yield Response}
+\subsection*{Yield response to lime application in Kenya}
+\begin{frame} {Yield response to lime application in Kenya}
+    
+        \begin{figure}
+                \centering
+        \includegraphics[width=\textwidth]{../../data-output/figures_and_tables/KEN_yield_response_.png}
+       
+        \end{figure}
+
+\end{frame}
+
+\section{Additional Production}
+\subsection*{Potential for additional production (tone) in top 10 acidic counties in Kenya }
+\begin{frame}{Potential for additional production (tone) in top 10 acidic counties in Kenya }
+            
+           \begin{figure}
+           \includegraphics[width=\textwidth, height=0.85\textheight]{../../data-output/figures_and_tables/KEN_plt_additional_production.png}
+          
+           \end{figure}
+\end{frame}
+
+\subsection*{Potential for additional production value (US\$) in top 10 acidic counties in Kenya }
+\begin{frame}{Potential for additional production value (US\$) in top 10 acidic counties in Kenya }
+            
+           \begin{figure}
+           \includegraphics[width=\textwidth, height=0.85\textheight]{../../data-output/figures_and_tables/KEN_plt_additional_production_value.png}
+          
+           \end{figure}
+
+\end{frame}
+
+
+
+\section{ROI for Lime Application}
+\subsection*{Return on investment for lime application in Kenya}
+\begin{frame} {Return on investment for lime application in Kenya}
+    
+        \begin{figure}
+                \centering
+        \includegraphics[width=\textwidth]{../../data-output/figures_and_tables/KEN_roi_usdha_.png}
+       
+        \end{figure}
+
+\end{frame}
+
+\section{Profitability of Lime Application}
+\subsection*{Profitability of lime application in Kenya}
+\begin{frame} {Profitability of lime application in Kenya}
+    
+        \begin{figure}
+                \centering
+        \includegraphics[width=\textwidth]{../../data-output/figures_and_tables/KEN_profitable_area_.png}
+       
+        \end{figure}
+
+\end{frame}
+\end{document} 

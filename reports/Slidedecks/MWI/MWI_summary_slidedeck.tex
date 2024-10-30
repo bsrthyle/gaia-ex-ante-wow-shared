@@ -1,0 +1,203 @@
+\documentclass[xcolor=table, aspectratio=1610]{beamer}
+
+\usetheme[]{Montpellier}
+
+\setbeamertemplate{itemize items}[square]
+\setbeamertemplate{section in toc}[sections numbered]
+
+\setbeamertemplate{frametitle}{
+    \begin{centering}
+        \small\textsc{\insertframetitle}\par
+    \end{centering}
+}
+\definecolor{mygreen}{RGB}{118, 188, 33}
+\definecolor{mylightgreen}{RGB}{144,238,144}
+
+\setbeamercolor*{palette primary}{bg=mygreen!70, fg=white}
+\setbeamercolor*{palette secondary}{bg=mygreen!1, fg=black}
+\setbeamercolor*{palette tertiary}{bg=mygreen!1, fg=black}
+\setbeamercolor*{palette quaternary}{bg=mygreen!85, fg=white}
+
+\setbeamercolor{block title}{bg=mygreen, fg=white}
+\setbeamercolor{block body}{bg=mylightgreen, fg=black}
+\setbeamertemplate{title page}[default][rounded=false]
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{fouriernc}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue,
+    citecolor=blue
+}
+\usetikzlibrary{arrows,calc}
+\usepackage{relsize}
+
+\makeatletter
+\usepackage{xcolor}
+\definecolor{customtitlebg}{RGB}{230, 230, 250}
+\definecolor{customauthorbg}{RGB}{245, 245, 220}
+\definecolor{customdatebg}{RGB}{240, 255, 240}
+
+\setbeamercolor{title}{bg=mygreen, fg=white}
+
+\makeatletter
+\defbeamertemplate*{title page}{custom}{
+  \vbox{}
+  \vfill
+  \begin{centering}
+    \begin{beamercolorbox}[sep=14pt,rounded=false, shadow=true, wd=\textwidth, center]{title}
+      \usebeamerfont{title}\inserttitle\par%
+      \ifx\insertsubtitle\@empty%
+      \else%
+        \vskip0.25em%
+        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle}%
+        \par%
+      \fi%
+    \end{beamercolorbox}%
+    \vskip1em\par%
+    \begin{beamercolorbox}[sep=8pt,center]{author}
+      \usebeamerfont{author}\insertauthor\\
+      {
+\vspace{80pt}
+\vspace{\fill}
+\footnotesize{Last Updated: \today}
+}
+    \end{beamercolorbox}
+    \vskip1em\par%
+    \vfill
+  \end{centering}
+}
+\makeatother
+\useinnertheme{rounded}
+
+\setbeamertemplate{title page}[custom]
+
+\title[Malawi--Summary]{\textsf{Summary Data on Acid Cropland and Lime Requirements in Malawi}} 
+\author[GAIA]{GAIA\\ \href{www.acidsoils.africa}{www.acidsoils.africa} } 
+\institute[CIMMYT] 
+
+\begin{document}
+
+\begin{frame}[plain]
+\textsc{\titlepage}
+\end{frame}
+
+\begin{frame}
+\frametitle{Outlook}
+\tableofcontents 
+\end{frame}
+
+\section{Introduction}
+\section{Acidic Cropland}
+\subsection*{Top 10 Towns in Malawi with the highest acidic cropland}
+
+\begin{frame}{Top 10 Towns in Malawi with the highest acidic cropland}
+    \begin{figure}
+    \includegraphics[width=0.85\textwidth, height=0.80\textheight]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/MWI//MWI_plt_acidic_cropland.png}
+    \end{figure}
+\end{frame}
+
+\subsection*{Top 10 Towns in Malawi with the highest acidic cropland (Percentage of total cropland)}
+\begin{frame}{Top 10 Towns in Malawi with the highest acidic cropland (Percentage of total cropland)}
+    \begin{figure}
+    \includegraphics[width=0.85\textwidth, height=0.80\textheight]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/MWI//MWI_plt_acidic_cropland_perc.png}
+    \end{figure}
+\end{frame}
+
+\section*{Total crop area distribution (ha)}
+\subsection*{Total crop area in the top-10 most acidic Towns, not segregated by acidic cropland}
+\begin{frame}{Total crop area in the top-10 most acidic Towns, not segregated by acidic cropland}
+    \begin{center}
+        \includegraphics[scale=0.45]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/MWI//MWI_plt_crop_area_acidic.png}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \scriptsize
+    \input{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/MWI//MWI_table_crop_area_acidic.tex}
+\end{frame}
+
+\section{Yield Loss}
+\subsection*{Yield loss for Maize and Beans (\%) in Malawi}
+\begin{frame}{Yield loss due to soil acidity for Maize and Beans in Malawi}
+    \begin{figure}
+    \includegraphics[width=\textwidth]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/MWI//MWI_yield_loss.png}
+    \end{figure}
+\end{frame}
+
+\section{Lime Requirement}
+\subsection*{Lime requirements (t) for acid soil remediation}
+\begin{frame} {Lime requirements (t) for acid soil remediation in Malawi}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.45]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/MWI//MWI_plt_lime_requirements.png}
+    \end{figure}
+\end{frame}
+
+\subsection*{Lime requirements (t) for acid soil remediation (table)}
+\begin{frame} {Lime requirements (t) for acid soil remediation in Malawi (table)}
+    \scriptsize
+    \input{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/MWI//MWI_table_lime_requirements.tex}
+\end{frame}
+
+\subsection*{Lime rate for Maize and Beans in Malawi}
+\begin{frame} {Lime rate for Maize and Beans in Malawi}
+    \begin{figure}
+        \centering
+        \includegraphics[width=\textwidth]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/MWI//MWI_lime_rate.png}
+    \end{figure}
+\end{frame}
+
+\section{Yield Response}
+\subsection*{Yield response to lime application in Malawi}
+\begin{frame} {Yield response to lime application in Malawi}
+    \begin{figure}
+        \centering
+        \includegraphics[width=\textwidth]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/MWI//MWI_yield_response.png}
+    \end{figure}
+\end{frame}
+
+\section{Additional Production}
+\subsection*{Potential for additional production (tone) in top 10 acidic Towns in Malawi}
+\begin{frame}{Potential for additional production (tone) in top 10 acidic Towns in Malawi}
+    \begin{figure}
+    \includegraphics[width=\textwidth, height=0.85\textheight]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/MWI//MWI_plt_additional_production.png}
+    \end{figure}
+\end{frame}
+
+\subsection*{Potential for additional production value (US\$) in top 10 acidic Towns in Malawi}
+\begin{frame}{Potential for additional production value (US\$) in top 10 acidic Towns in Malawi}
+    \begin{figure}
+    \includegraphics[width=\textwidth, height=0.85\textheight]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/MWI//MWI_plt_additional_production_value.png}
+    \end{figure}
+\end{frame}
+
+\section{ROI for Lime Application}
+\subsection*{Return on investment for lime application in Malawi}
+\begin{frame} {Return on investment for lime application in Malawi}
+    \begin{figure}
+        \centering
+        \includegraphics[width=\textwidth]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/MWI//MWI_roi.png}
+    \end{figure}
+\end{frame}
+
+\section{Profitability of Lime Application}
+\subsection*{Profitability of lime application in Malawi}
+\begin{frame} {Profitability of lime application in Malawi}
+    \begin{figure}
+        \centering
+        \includegraphics[width=\textwidth]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/MWI//MWI_profit.png}
+    \end{figure}
+\end{frame}
+\end{document}
