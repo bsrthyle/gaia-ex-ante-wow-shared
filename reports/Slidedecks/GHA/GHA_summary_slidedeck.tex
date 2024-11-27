@@ -1,0 +1,230 @@
+\documentclass[xcolor=table, aspectratio=1610]{beamer}
+
+\usetheme[]{Montpellier}
+
+\setbeamertemplate{itemize items}[square]
+\setbeamertemplate{section in toc}[sections numbered]
+
+\setbeamertemplate{frametitle}{
+    \begin{centering}
+        \small\textsc{\insertframetitle}\par
+    \end{centering}
+}
+\definecolor{mygreen}{RGB}{0, 128, 128}
+\definecolor{mylightgreen}{RGB}{144,238,144}
+
+\setbeamercolor*{palette primary}{bg=mygreen!70, fg=white}
+\setbeamercolor*{palette secondary}{bg=mygreen!1, fg=black}
+\setbeamercolor*{palette tertiary}{bg=mygreen!1, fg=black}
+\setbeamercolor*{palette quaternary}{bg=mygreen!85, fg=white}
+
+\setbeamercolor{block title}{bg=mygreen, fg=white}
+\setbeamercolor{block body}{bg=mylightgreen, fg=black}
+\setbeamertemplate{title page}[default][rounded=false]
+\setbeamercolor{item}{fg=mygreen}
+\setbeamercolor{frametitle right}{bg=mygreen!60}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{fouriernc}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue,
+    citecolor=blue
+}
+\usetikzlibrary{arrows,calc}
+\usepackage{relsize}
+
+\makeatletter
+\usepackage{xcolor}
+\definecolor{customtitlebg}{RGB}{230, 230, 250}
+\definecolor{customauthorbg}{RGB}{245, 245, 220}
+\definecolor{customdatebg}{RGB}{240, 255, 240}
+
+\setbeamercolor{title}{bg=mygreen, fg=white}
+
+\makeatletter
+\defbeamertemplate*{title page}{custom}{
+  \vbox{}
+  \vfill
+  \begin{centering}
+    \begin{beamercolorbox}[sep=14pt,rounded=false, shadow=true, wd=\textwidth, center]{title}
+      \usebeamerfont{title}\inserttitle\par%
+      \ifx\insertsubtitle\@empty%
+      \else%
+        \vskip0.25em%
+        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle}%
+        \par%
+      \fi%
+    \end{beamercolorbox}%
+    \vskip1em\par%
+    \begin{beamercolorbox}[sep=8pt,center]{author}
+      \usebeamerfont{author}\insertauthor\\
+      {
+\vspace{80pt}
+\vspace{\fill}
+\footnotesize{Last Updated: \today}
+}
+    \end{beamercolorbox}
+    \vskip1em\par%
+    \vfill
+  \end{centering}
+}
+\makeatother
+\useinnertheme{rounded}
+
+\setbeamertemplate{title page}[custom]
+
+\title[Ghana--Summary]{\textsf{Summary Data on Acid Cropland and Lime Requirements in Ghana}} 
+\author[GAIA]{GAIA\\ \href{www.acidsoils.africa}{www.acidsoils.africa} } 
+\institute[CIMMYT] 
+
+\begin{document}
+
+\begin{frame}[plain]
+\textsc{\titlepage}
+\end{frame}
+
+\begin{frame}
+\frametitle{Outlook}
+\tableofcontents 
+\end{frame}
+
+\section{Introduction}
+\begin{frame}{Introduction}
+    \begin{itemize}
+        \item The slide deck provides a \textbf{data-driven}, \textbf{ex-ante analysis} of soil acidity across \textbf{Ghana}, evaluating the scale of affected areas, potential crop yield impacts, and the expected benefits of lime application for proactive soil remediation.
+        \bigskip
+        \item \textbf{Highlights}:
+        \begin{itemize}
+            \item \textbf{Acidic Cropland}: Identifies regions with high acidity levels impacting crop yields.
+            \item \textbf{Yield Loss}: Quantifies productivity losses in key crops due to acidic soils.
+            \item \textbf{Lime Requirements}: Estimates the lime amounts needed to improve soil health in these areas.
+            \item \textbf{Economic Potential}: Highlights estimated increases in production and production value from lime application.
+        \end{itemize}
+        \bigskip
+        \item Provide policymakers, farmers, and stakeholders with actionable insights to prioritize areas with high potential for productivity gains and economic return from soil remediation.
+    \end{itemize}
+\end{frame}
+\section{Acidic Cropland}
+\subsection*{Top 10 Regions in Ghana with the highest acidic cropland}
+
+\begin{frame}{Top 10 Regions in Ghana with the highest acidic cropland}
+    \begin{figure}
+    \includegraphics[width=0.95\textwidth]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/GHA//GHA_plt_acidic_cropland.png}
+    \end{figure}
+\end{frame}
+
+\subsection*{Top 10 Regions in Ghana with the highest acidic cropland (Percentage of total cropland)}
+\begin{frame}{Top 10 Regions in Ghana with the highest acidic cropland (Percentage of total cropland)}
+    \begin{figure}
+    \includegraphics[width=0.95\textwidth]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/GHA//GHA_plt_acidic_cropland_perc.png}
+    \end{figure}
+\end{frame}
+
+\section*{Total crop area distribution (ha)}
+\subsection*{Total crop area in the top-10 most acidic Regions, not segregated by acidic cropland}
+\begin{frame}{Total crop area in the top-10 most acidic Regions, not segregated by acidic cropland}
+    \begin{center}
+        \includegraphics[width=0.95\textwidth]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/GHA//GHA_plt_crop_area_acidic.png}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Total crop area in the top-10 most acidic Regions, not segregated by acidic cropland (table)}
+    \scriptsize
+    \input{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/GHA//GHA_table_crop_area_acidic.tex}
+\end{frame}
+
+\section{Additional Production}
+\subsection*{Potential for additional production (tone) in top 10 acidic Regions in Ghana}
+\begin{frame}{Potential for additional production (tone) in top 10 acidic Regions in Ghana}
+    \begin{figure}
+    \includegraphics[width=0.98\textwidth, height=0.85\textheight]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/GHA//GHA_plt_additional_production.png}
+    \end{figure}
+\end{frame}
+
+\subsection*{Potential for additional production (tone) in top 10 acidic Regions in Ghana}
+\begin{frame}{Potential for additional production (1000 tone) in top 10 acidic Regions in Ghana(Table) }
+    \scriptsize
+    \input{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/GHA//GHA_table_additional_production.tex}
+\end{frame}
+
+\subsection*{Potential for additional production value (US\$) in top 10 acidic Regions in Ghana}
+\begin{frame}{Potential for additional production value (US\$) in top 10 acidic Regions in Ghana}
+    \begin{figure}
+    \includegraphics[width=0.98\textwidth, height=0.85\textheight]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/GHA//GHA_plt_additional_production_value.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Potential for additional production value (1000 US\$) in top 10 acidic Regions in Ghana(Table)}
+    \scriptsize
+    \input{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/GHA//GHA_table_additional_production_value.tex}
+\end{frame}
+
+\section{Yield Loss}
+\subsection*{Yield loss for Maize and Cacao(\%) in Ghana}
+\begin{frame}{Yield loss due to soil acidity for Maize and Cacao in Ghana}
+    \begin{figure}
+    \includegraphics[width=0.95\textwidth]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/GHA//GHA_yield_loss.png}
+    \end{figure}
+\end{frame}
+
+\section{Yield Response}
+\subsection*{Yield response to lime application in Ghana}
+\begin{frame} {Yield response to lime application in Ghana}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.98\textwidth]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/GHA//GHA_yield_response.png}
+    \end{figure}
+\end{frame}
+
+\section{Lime Requirement}
+\subsection*{Lime requirements (t) for acid soil remediation}
+\begin{frame} {Lime requirements (t) for acid soil remediation in Ghana}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.95\textwidth]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/GHA//GHA_plt_lime_requirements.png}
+    \end{figure}
+\end{frame}
+
+\subsection*{Lime requirements (t) for acid soil remediation (table)}
+\begin{frame} {Lime requirements (1000 t) for acid soil remediation in Ghana (table)}
+    \scriptsize
+    \input{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/GHA//GHA_table_lime_requirements.tex}
+\end{frame}
+
+\subsection*{Lime rate for Maize and Cacao in Ghana}
+\begin{frame} {Lime rate for Maize and Cacao in Ghana}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.98\textwidth]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/GHA//GHA_lime_rate.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Main assumptions and parameters}
+\small
+\begin{itemize}
+
+    \item Acidic cropland is defined as having acidity saturation levels above 10\% of the Effective Cation Exchange Capacity (ECEC).
+    \item Crop yields are unaffected by soil acidity until a specific acidity saturation threshold Target Acidity Saturation(TAS) is reached; beyond this threshold, yields decrease linearly, eventually reaching zero at high acidity levels.
+    \item The TAS that separates maximum yield from yield decline is used as a critical value for making liming recommendations.
+    \item Actual yields in acid tropical soils are a fraction of the potential yields in non-acidic soils, determined by the estimated yield loss due to acidity.
+    \item Economic benefits from liming are calculated by multiplying the additional yield after soil remediation by median crop prices from sub-Saharan Africa (2016-2020 FAOSTAT data). The cost of liming is calculated using estimated lime application rates and a fixed lime price of 100 US\$/ton.
+    \item The benefits of liming are assessed only for the year of application due to a lack of robust, large-scale data on long-term effects in sub-Saharan Africa.
+\end{itemize}
+\centering
+For details, visit \href{www.acidsoils.africa}{www.acidsoils.africa}.
+\end{frame}
+
+\end{document}

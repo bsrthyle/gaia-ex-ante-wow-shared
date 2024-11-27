@@ -1,0 +1,24 @@
+\documentclass[aspectratio=1610]{beamer}
+
+% Packages
+% Define the country parameter
+\newcommand{\CountryName}{Nigeria} % Default country
+\newcommand{\BackgroundImagePath}{figures/slide_cover_eia.png}
+\newcommand{\DashboardImagePath}{figures/dashboard_2.png}
+\input{eia_presentation_templet.tex}
+\begin{document}
+
+% Title page with background image
+\CustomTitlePage
+% Reset to default background for subsequent slides
+\usebackgroundtemplate{}
+
+% Normal slides
+\begin{frame}
+    \frametitle{Introduction}
+    This is a slide without a background image.
+\end{frame}
+
+\CustomEndPage
+
+\end{document}

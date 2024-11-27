@@ -86,7 +86,7 @@ color_new <- c(
   "#DEFFC4",
   "#A0B392"
 )
-Darjeeling1 <- wesanderson::wes_palettes$Darjeeling1
+  Darjeeling1 <- wesanderson::wes_palettes$Darjeeling1
 Darjeeling2 <- wesanderson::wes_palettes$Darjeeling2
 Royal2 <- wesanderson::wes_palettes$Royal2
 Moonrise1 <- wesanderson::wes_palettes$Moonrise1
@@ -686,6 +686,41 @@ create_and_save_additional_production_plots <- function(country_iso3,
     country_iso3 = country_iso3
   )
   
+  # additional production table
+  
+  df_additional_production_tbl <- df_additional_production %>%
+    dplyr::group_by(NAME_1, crop_types) %>%
+    mutate(NAME_1 = stringr::str_wrap(NAME_1, width = 10)) %>%
+    dplyr::summarise(additional_production_t = sum(additional_production_t)) %>%
+    tidyr::pivot_wider(names_from = crop_types, values_from = additional_production_t) %>%
+    dplyr::mutate(across(everything(), ~ round(., 2))) %>%
+    mutate(mutate(across(everything(), ~ ifelse(.==0, NA, .)))) %>%
+    rename(!!level_name := NAME_1)%>%
+    knitr::kable("latex", escape = TRUE, booktabs = TRUE) %>%
+    kableExtra::kable_styling(latex_options = c("striped", "hold_position"), font_size =7) %>%
+    kableExtra::column_spec(1, width = "1.8cm")%>%
+    as.character() %>%
+    gsub("NA", "\\-", .) %>%
+    gsub("(?<!\\d)0\\.00(?!\\d)", "-", ., perl = TRUE)%>%
+    gsub("Other-Commodity", "\\\\makecell{Other-\\\\\\\\Commodity}", .) %>%
+    gsub("Other-Cereal", "\\\\makecell{Other-\\\\\\\\Cereal}", .) %>%
+    gsub("Other-Legume", "\\\\makecell{Other-\\\\\\\\Legume}", .) %>%
+    gsub("Other-RTBs", "\\\\makecell{Other-\\\\\\\\RTBs}", .) %>%
+    gsub("Other-Non-food",
+         "\\\\makecell{Other-\\\\\\\\Non-food}",
+         .)
+  
+  # Step 5: Save the table as a .tex file
+  writeLines(df_additional_production_tbl,
+             file.path(
+               figures_and_tables_path,
+               paste0(country_iso3, "_table_additional_production.tex")
+             ))
+  
+  message("Successfully saved the latex table for additional production in acidic cropland.")
+  
+  
+  
   # Step 4: Process additional production value data
   df_additional_production_value <- csv_list[[paste0("additional-value_", country_iso3, "-admin1.csv")]] %>%
     dplyr::arrange(desc(high_hp)) %>%
@@ -754,6 +789,38 @@ create_and_save_additional_production_plots <- function(country_iso3,
     country_iso3 = country_iso3
   )
   
+  # additional production value table
+  
+  df_additional_production_value_tbl <- df_additional_production_value %>%
+    dplyr::group_by(NAME_1, crop_types) %>%
+    mutate(NAME_1 = stringr::str_wrap(NAME_1, width = 10)) %>%
+    dplyr::summarise(additional_production_usd = sum(additional_production_usd)) %>%
+    tidyr::pivot_wider(names_from = crop_types, values_from = additional_production_usd) %>%
+    dplyr::mutate(across(everything(), ~ round(., 1))) %>%
+    mutate(mutate(across(everything(), ~ ifelse(.==0, NA, .)))) %>%
+    rename(!!level_name := NAME_1)%>%
+    knitr::kable("latex", escape = TRUE, booktabs = TRUE) %>%
+    kableExtra::kable_styling(latex_options = c("striped", "hold_position"), font_size =7) %>%
+    kableExtra::column_spec(1, width = "1.8cm")%>%
+    as.character() %>%
+    gsub("NA", "\\-", .) %>%
+    gsub("(?<!\\d)0\\.00(?!\\d)", "-", ., perl = TRUE)%>%
+    gsub("Other-Commodity", "\\\\makecell{Other-\\\\\\\\Commodity}", .) %>%
+    gsub("Other-Cereal", "\\\\makecell{Other-\\\\\\\\Cereal}", .) %>%
+    gsub("Other-Legume", "\\\\makecell{Other-\\\\\\\\Legume}", .) %>%
+    gsub("Other-RTBs", "\\\\makecell{Other-\\\\\\\\RTBs}", .) %>%
+    gsub("Other-Non-food",
+         "\\\\makecell{Other-\\\\\\\\Non-food}",
+         .)
+  
+  # Step 7: Save the table as a .tex file
+  writeLines(df_additional_production_value_tbl,
+             file.path(
+               figures_and_tables_path,
+               paste0(country_iso3, "_table_additional_production_value.tex")
+             ))
+  
+  
   message(
     "Successfully created and saved the plots for additional production and value in acidic cropland."
   )
@@ -794,7 +861,8 @@ create_and_save_lime_requirements <- function(country_iso3,
                         values_to = "lime_requirements_t") %>%
     dplyr::mutate(crop = gsub("_lr_tha", "", crop)) %>%
     dplyr::left_join(crops_df, by = c("crop" = "crop")) %>%
-    dplyr::filter(lime_requirements_t > 0) 
+    dplyr::filter(lime_requirements_t > 0)%>%
+    dplyr::mutate(lime_requirements_t = lime_requirements_t / 1000)
   
   # Step 2: Create the stacked bar plot for lime requirements
   plt_lime_requirements <- ggplot(df_lime_requirements,
@@ -849,6 +917,8 @@ create_and_save_lime_requirements <- function(country_iso3,
     dplyr::group_by(NAME_1, crop_types) %>%
     mutate(NAME_1 = stringr::str_wrap(NAME_1, width = 10)) %>%
     dplyr::summarise(lime_requirements_t = sum(lime_requirements_t)) %>%
+    #dplyr::mutate(lime_requirements_t = lime_requirements_t / 1000) %>%
+    dplyr::mutate(lime_requirements_t = ifelse(lime_requirements_t < 0.00001, NA, lime_requirements_t)) %>%
     tidyr::pivot_wider(names_from = crop_types, values_from = lime_requirements_t) %>%
     dplyr::mutate(across(everything(), ~ round(., 2))) %>%
     rename(!!level_name := NAME_1)%>%
@@ -1172,7 +1242,7 @@ generic_raster_plot <- function(raster_data,
   terra::plot(
     cty,
     add = TRUE,
-    border = 'grey',
+    border = 'black',
     alpha = 0.3,
     lwd = 0.3
   )
@@ -1195,6 +1265,8 @@ create_and_save_raster_plots <- function(country_iso3,
                                          input_path,
                                          figures_and_tables_path,
                                          output_path) {
+  
+  #country_iso3 <- "TZA"
   # Load administrative boundaries
   cty_1 <- geodata::gadm(country_iso3, level = 1, path = input_path)
   
@@ -1213,14 +1285,17 @@ create_and_save_raster_plots <- function(country_iso3,
   all_crops_gm <- profitable_raster_ori[[grep('actual_profit', names(profitable_raster_ori))]]
   w_p <- terra::weighted.mean(all_crops_gm, all_crops_ha, na.rm = T)
   
+  
   w_p <- terra::crop(w_p, cty_1, mask = TRUE)
   # Define raster pairs and parameters for plotting
   raster_pairs <- list(
     list(
       raster1 = a_p,
       title1 = 'Profitable area (%)',
+      breaks1 = c(0,20,40,60,80,100),
       raster2 = w_p,
       title2 = 'Weighted profit (USD/ha)',
+      breaks2 = c(0,100,200,300,400,500,600, Inf) ,
       file_suffix = "profit"
     )
   )
@@ -1249,8 +1324,9 @@ create_and_save_raster_plots <- function(country_iso3,
   second_crop_name <- main_crop$crop_type
 
   
-  lime_rate_maize <- terra::crop(exante_output[[grep('MAIZ_lr_tha', names(exante_output))]] * exante_output[["MAIZ"]], cty_1, mask = TRUE)
-  lime_rate_bean <- terra::crop(exante_output[[grep(paste0(second_crop,'_lr_tha'), names(exante_output))]] * exante_output[[second_crop]], cty_1, mask = TRUE)
+  lime_rate_maize <- terra::crop(exante_output[[grep('MAIZ_lr_tha', names(exante_output))]], cty_1, mask = TRUE)
+  
+  lime_rate_bean <- terra::crop(exante_output[[grep(paste0(second_crop,'_lr_tha'), names(exante_output))]], cty_1, mask = TRUE)
   
   yield_loss_maize <- terra::crop(exante_output[[grep('MAIZ_loss', names(exante_output))]], cty_1, mask = TRUE)
   yield_loss_maize <- (1-yield_loss_maize)*100
@@ -1291,15 +1367,17 @@ create_and_save_raster_plots <- function(country_iso3,
     ),
     list(
       raster1 = roi_maize,
-      title1 = 'Maize ROI (USD/ha)',
+      title1 = 'Maize ROI (USD/USD)',
       raster2 = roi_bean,
-      title2 = paste0(second_crop_name,' ROI (USD/ha)'),
+      title2 = paste0(second_crop_name,' ROI (USD/USD)'),
       file_suffix = "roi"
     )
   ))
   
   # Loop through the raster pairs and generate plots
   for (raster_pair in raster_pairs) {
+    max_value_1 <- terra::global(raster_pair$raster1, fun = "max", na.rm = TRUE)$max
+    max_value_2 <- terra::global(raster_pair$raster2, fun = "max", na.rm = TRUE)$max
     png(
       filename = paste0(
         figures_and_tables_path,
@@ -1320,6 +1398,8 @@ create_and_save_raster_plots <- function(country_iso3,
     # Plot the first raster
     terra::plot(raster_pair$raster1,
                 main = raster_pair$title1,
+                breaks = raster_pair$breaks1,
+                range = c(0,max_value_1),
                 col = Zissou1)
     terra::plot(
       cty_1,
@@ -1332,6 +1412,7 @@ create_and_save_raster_plots <- function(country_iso3,
     # Plot the second raster
     terra::plot(raster_pair$raster2,
                 main = raster_pair$title2,
+                range = c(0,max_value_2),
                 col = Zissou1)
     terra::plot(
       cty_1,
@@ -1483,11 +1564,14 @@ write_latex_slidedeck <- function(country_code, report_path, level_name, figures
   second_crop_name <- main_crop$crop_type
   # Path for the images and tables
   # figures_and_tables_path <- file.path("../../data-output/figures_and_tables/")
+  # "\\usepackage{fouriernc}\n\n",
+  # "\\usefonttheme{serif}\n\n",
   
   # Content of the LaTeX document
   latex_content <- paste0(
     "\\documentclass[xcolor=table, aspectratio=1610]{beamer}\n\n",
     "\\usetheme[]{Montpellier}\n\n",
+    
     "\\setbeamertemplate{itemize items}[square]\n",
     "\\setbeamertemplate{section in toc}[sections numbered]\n\n",
     "\\setbeamertemplate{frametitle}{\n",
@@ -1495,7 +1579,7 @@ write_latex_slidedeck <- function(country_code, report_path, level_name, figures
     "        \\small\\textsc{\\insertframetitle}\\par\n",
     "    \\end{centering}\n",
     "}\n",
-    "\\definecolor{mygreen}{RGB}{118, 188, 33}\n",
+    "\\definecolor{mygreen}{RGB}{0, 128, 128}\n",
     "\\definecolor{mylightgreen}{RGB}{144,238,144}\n\n",
     "\\setbeamercolor*{palette primary}{bg=mygreen!70, fg=white}\n",
     "\\setbeamercolor*{palette secondary}{bg=mygreen!1, fg=black}\n",
@@ -1504,6 +1588,8 @@ write_latex_slidedeck <- function(country_code, report_path, level_name, figures
     "\\setbeamercolor{block title}{bg=mygreen, fg=white}\n",
     "\\setbeamercolor{block body}{bg=mylightgreen, fg=black}\n",
     "\\setbeamertemplate{title page}[default][rounded=false]\n",
+    "\\setbeamercolor{item}{fg=mygreen}\n",
+    "\\setbeamercolor{frametitle right}{bg=mygreen!60}\n" ,
     "\\usepackage{amsfonts}\n",
     "\\usepackage{amsmath}\n",
     "\\usepackage{amsthm}\n",
@@ -1574,6 +1660,21 @@ write_latex_slidedeck <- function(country_code, report_path, level_name, figures
     "\\tableofcontents \n",
     "\\end{frame}\n\n",
     "\\section{Introduction}\n",
+    "\\begin{frame}{Introduction}\n",
+    "    \\begin{itemize}\n",
+    "        \\item The slide deck provides a \\textbf{data-driven}, \\textbf{ex-ante analysis} of soil acidity across \\textbf{", country_name, "}, evaluating the scale of affected areas, potential crop yield impacts, and the expected benefits of lime application for proactive soil remediation.\n",
+    "        \\bigskip\n",
+    "        \\item \\textbf{Highlights}:\n",
+    "        \\begin{itemize}\n",
+    "            \\item \\textbf{Acidic Cropland}: Identifies regions with high acidity levels impacting crop yields.\n",
+    "            \\item \\textbf{Yield Loss}: Quantifies productivity losses in key crops due to acidic soils.\n",
+    "            \\item \\textbf{Lime Requirements}: Estimates the lime amounts needed to improve soil health in these areas.\n",
+    "            \\item \\textbf{Economic Potential}: Highlights estimated increases in production and production value from lime application.\n",
+    "        \\end{itemize}\n",
+    "        \\bigskip\n",
+    "        \\item Provide policymakers, farmers, and stakeholders with actionable insights to prioritize areas with high potential for productivity gains and economic return from soil remediation.\n",
+    "    \\end{itemize}\n",
+    "\\end{frame}\n",
     "\\section{Acidic Cropland}\n",
     "\\subsection*{Top 10 ", level_name, " in ", country_name, " with the highest acidic cropland}\n\n",
     "\\begin{frame}{Top 10 ", level_name, " in ", country_name, " with the highest acidic cropland}\n",
@@ -1594,15 +1695,50 @@ write_latex_slidedeck <- function(country_code, report_path, level_name, figures
     "        \\includegraphics[width=0.95\\textwidth]{", file.path(figures_and_tables_path, paste0(country_code, "_plt_crop_area_acidic.png")), "}\n",
     "    \\end{center}\n",
     "\\end{frame}\n\n",
-    "\\begin{frame}\n",
+    "\\begin{frame}{Total crop area in the top-10 most acidic ", level_name, ", not segregated by acidic cropland (table)}\n",
     "    \\scriptsize\n",
     "    \\input{", file.path(figures_and_tables_path, paste0(country_code, "_table_crop_area_acidic.tex")), "}\n",
     "\\end{frame}\n\n",
+    
+    "\\section{Additional Production}\n",
+    "\\subsection*{Potential for additional production (tone) in top 10 acidic ", level_name, " in ", country_name, "}\n",
+    "\\begin{frame}{Potential for additional production (tone) in top 10 acidic ", level_name, " in ", country_name, "}\n",
+    "    \\begin{figure}\n",
+    "    \\includegraphics[width=0.98\\textwidth, height=0.85\\textheight]{", file.path(figures_and_tables_path, paste0(country_code, "_plt_additional_production.png")), "}\n",
+    "    \\end{figure}\n",
+    "\\end{frame}\n\n",
+    
+    "\\subsection*{Potential for additional production (tone) in top 10 acidic ", level_name, " in ", country_name, "}\n",
+    "\\begin{frame}{Potential for additional production (1000 tone) in top 10 acidic ", level_name, " in ", country_name,"(Table) ", "}\n",
+    "    \\scriptsize\n",
+    "    \\input{", file.path(figures_and_tables_path, paste0(country_code, "_table_additional_production.tex")), "}\n",
+    "\\end{frame}\n\n",
+    
+    "\\subsection*{Potential for additional production value (US\\$) in top 10 acidic ", level_name, " in ", country_name, "}\n",
+    "\\begin{frame}{Potential for additional production value (US\\$) in top 10 acidic ", level_name, " in ", country_name, "}\n",
+    "    \\begin{figure}\n",
+    "    \\includegraphics[width=0.98\\textwidth, height=0.85\\textheight]{", file.path(figures_and_tables_path, paste0(country_code, "_plt_additional_production_value.png")), "}\n",
+    "    \\end{figure}\n",
+    "\\end{frame}\n\n",
+    
+    "\\begin{frame}{Potential for additional production value (1000 US\\$) in top 10 acidic ", level_name, " in ", country_name,"(Table)", "}\n",
+    "    \\scriptsize\n",
+    "    \\input{", file.path(figures_and_tables_path, paste0(country_code, "_table_additional_production_value.tex")), "}\n",
+    "\\end{frame}\n\n",
+    
     "\\section{Yield Loss}\n",
     "\\subsection*{Yield loss for Maize and ", second_crop_name , "(\\%) in ", country_name, "}\n",
     "\\begin{frame}{Yield loss due to soil acidity for Maize and ", second_crop_name, " in ", country_name, "}\n",
     "    \\begin{figure}\n",
     "    \\includegraphics[width=0.95\\textwidth]{", file.path(figures_and_tables_path, paste0(country_code, "_yield_loss.png")), "}\n",
+    "    \\end{figure}\n",
+    "\\end{frame}\n\n",
+    "\\section{Yield Response}\n",
+    "\\subsection*{Yield response to lime application in ", country_name, "}\n",
+    "\\begin{frame} {Yield response to lime application in ", country_name, "}\n",
+    "    \\begin{figure}\n",
+    "        \\centering\n",
+    "        \\includegraphics[width=0.98\\textwidth]{", file.path(figures_and_tables_path, paste0(country_code, "_yield_response.png")), "}\n",
     "    \\end{figure}\n",
     "\\end{frame}\n\n",
     "\\section{Lime Requirement}\n",
@@ -1614,7 +1750,7 @@ write_latex_slidedeck <- function(country_code, report_path, level_name, figures
     "    \\end{figure}\n",
     "\\end{frame}\n\n",
     "\\subsection*{Lime requirements (t) for acid soil remediation (table)}\n",
-    "\\begin{frame} {Lime requirements (t) for acid soil remediation in ", country_name, " (table)}\n",
+    "\\begin{frame} {Lime requirements (1000 t) for acid soil remediation in ", country_name, " (table)}\n",
     "    \\scriptsize\n",
     "    \\input{", file.path(figures_and_tables_path, paste0(country_code, "_table_lime_requirements.tex")), "}\n",
     "\\end{frame}\n\n",
@@ -1625,43 +1761,6 @@ write_latex_slidedeck <- function(country_code, report_path, level_name, figures
     "        \\includegraphics[width=0.98\\textwidth]{", file.path(figures_and_tables_path, paste0(country_code, "_lime_rate.png")), "}\n",
     "    \\end{figure}\n",
     "\\end{frame}\n\n",
-    "\\section{Yield Response}\n",
-    "\\subsection*{Yield response to lime application in ", country_name, "}\n",
-    "\\begin{frame} {Yield response to lime application in ", country_name, "}\n",
-    "    \\begin{figure}\n",
-    "        \\centering\n",
-    "        \\includegraphics[width=0.98\\textwidth]{", file.path(figures_and_tables_path, paste0(country_code, "_yield_response.png")), "}\n",
-    "    \\end{figure}\n",
-    "\\end{frame}\n\n",
-    "\\section{Additional Production}\n",
-    "\\subsection*{Potential for additional production (tone) in top 10 acidic ", level_name, " in ", country_name, "}\n",
-    "\\begin{frame}{Potential for additional production (tone) in top 10 acidic ", level_name, " in ", country_name, "}\n",
-    "    \\begin{figure}\n",
-    "    \\includegraphics[width=0.98\\textwidth, height=0.85\\textheight]{", file.path(figures_and_tables_path, paste0(country_code, "_plt_additional_production.png")), "}\n",
-    "    \\end{figure}\n",
-    "\\end{frame}\n\n",
-    "\\subsection*{Potential for additional production value (US\\$) in top 10 acidic ", level_name, " in ", country_name, "}\n",
-    "\\begin{frame}{Potential for additional production value (US\\$) in top 10 acidic ", level_name, " in ", country_name, "}\n",
-    "    \\begin{figure}\n",
-    "    \\includegraphics[width=0.98\\textwidth, height=0.85\\textheight]{", file.path(figures_and_tables_path, paste0(country_code, "_plt_additional_production_value.png")), "}\n",
-    "    \\end{figure}\n",
-    "\\end{frame}\n\n",
-    "\\section{ROI for Lime Application}\n",
-    "\\subsection*{Return on investment for lime application in ", country_name, "}\n",
-    "\\begin{frame} {Return on investment for lime application in ", country_name, "}\n",
-    "    \\begin{figure}\n",
-    "        \\centering\n",
-    "        \\includegraphics[width=0.98\\textwidth]{", file.path(figures_and_tables_path, paste0(country_code, "_roi.png")), "}\n",
-    "    \\end{figure}\n",
-    "\\end{frame}\n\n",
-    "\\section{Profitability of Lime Application}\n",
-    "\\subsection*{Profitability of lime application in ", country_name, "}\n",
-    "\\begin{frame} {Profitability of lime application in ", country_name, "}\n",
-    "    \\begin{figure}\n",
-    "        \\centering\n",
-    "        \\includegraphics[width=0.98\\textwidth]{", file.path(figures_and_tables_path, paste0(country_code, "_profit.png")), "}\n",
-    "    \\end{figure}\n",
-    "\\end{frame}\n",
     "\\begin{frame}\n",
     "\\frametitle{Main assumptions and parameters}\n",
     "\\small\n",
@@ -1673,6 +1772,7 @@ write_latex_slidedeck <- function(country_code, report_path, level_name, figures
     \\item Economic benefits from liming are calculated by multiplying the additional yield after soil remediation by median crop prices from sub-Saharan Africa (2016-2020 FAOSTAT data). The cost of liming is calculated using estimated lime application rates and a fixed lime price of 100 US\\$/ton.
     \\item The benefits of liming are assessed only for the year of application due to a lack of robust, large-scale data on long-term effects in sub-Saharan Africa.
 \\end{itemize}\n",
+    "\\centering\n",
     "For details, visit \\href{www.acidsoils.africa}{www.acidsoils.africa}.\n",
     "\\end{frame}\n\n",
     "\\end{document}"

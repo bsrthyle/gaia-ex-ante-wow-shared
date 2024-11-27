@@ -20,18 +20,18 @@ assemble_lyrs <- function(var, is_usd=F, is_profitable=F){
     gm_c <- terra::ifel(gm_c > 0, 1, NA)
     if(is_profitable==F){
       if(is_usd==F){
-        label <- ifelse(var=='ya', '_curr_t', '_add_t')
+        label <- ifelse(var=='spam_ya', '_curr_t', '_add_t')
         var_c <- area_c * var_c; names(var_c) <- paste0(crop, label)
       } else{
-        label <- ifelse(var=='ya', '_curr_usd', '_add_usd')
+        label <- ifelse(var=='spam_ya', '_curr_usd', '_add_usd')
         var_c <- area_c * var_c * c_price; names(var_c) <- paste0(crop, label) }
       var_c
     } else{
       if(is_usd==F){
-        label <- ifelse(var=='ya', '_curr_t', '_add_t'); 
+        label <- ifelse(var=='spam_ya', '_curr_t', '_add_t'); 
         var_c <- area_c * var_c * gm_c; names(var_c) <- paste0(crop, label)
       } else{
-        label <- ifelse(var=='ya', '_curr_usd', '_add_usd')
+        label <- ifelse(var=='spam_ya', '_curr_usd', '_add_usd')
         var_c <- area_c * var_c * c_price * gm_c; names(var_c) <- paste0(crop, label) }
       var_c }
   })
@@ -108,13 +108,13 @@ master_f <- function(country_iso3, select_admin, var, is_usd, is_profitable){
   # unit = unit of the variable of interest -- determines folder path
   # var_rast = raster layers per crop for the variable of interest
   # ----------------------------------------------------  
-  if(var=='ya' && is_usd==F && is_profitable==F){
+  if(var=='spam_ya' && is_usd==F && is_profitable==F){
     # total current production
     unit <- '_curr_t' 
   } else if(var=='yresp_tha' && is_usd==F && is_profitable==F){
     # total additional production
     unit <- '_add_t' 
-  } else if(var=='ya' && is_usd==T && is_profitable==F){
+  } else if(var=='spam_ya' && is_usd==T && is_profitable==F){
     # total current value of production
     unit <- '_curr_usd' 
   } else if(var=='yresp_tha' && is_usd==T && is_profitable==F){
@@ -144,7 +144,7 @@ master_f <- function(country_iso3, select_admin, var, is_usd, is_profitable){
 
 extract_profit <- function(country_iso3, select_admin, save_map=T){
 
-  profitable_raster_ori <- terra::rast(Sys.glob(paste0(output_path, 'crop-rasters-final/*_profit_rasters.tif')))
+  profitable_raster_ori <- terra::rast(Sys.glob(paste0(output_path, 'crop-rasters-final/','*_','100_1_profit_rasters.tif')))
   # Exclude raster names containing '_area_profitable_perc'
   profitable_raster <- profitable_raster_ori[[grep('_area_profitable_perc', names(profitable_raster_ori), invert = TRUE)]]
   cty <- geodata::gadm(country_iso3, level=2, path=input_path)

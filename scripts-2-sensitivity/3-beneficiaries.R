@@ -10,10 +10,13 @@ output_path <- paste0(here::here(), '/data-output/')
 # number_of_farms instead of crop_area..
 # number_of_farms <- rural_populations * 0.7 or ask deo
 
+yield_factor <- 2
+lp <- 100
+
 crop_area <- terra::rast(paste0(input_path, "spam_harv_area_processed.tif"))
-q10 <- terra::rast(Sys.glob(paste0(input_path, 'profit_sensitivity/*_q10_year1_yield_1_cprice_1_lprice_100_discrate_0.1.tif')))
-q50 <- terra::rast(Sys.glob(paste0(input_path, 'profit_sensitivity/*_q50_year1_yield_1_cprice_1_lprice_100_discrate_0.1.tif')))
-q90 <- terra::rast(Sys.glob(paste0(input_path, 'profit_sensitivity/*_q90_year1_yield_1_cprice_1_lprice_100_discrate_0.1.tif')))
+q10 <- terra::rast(Sys.glob(paste0(input_path, 'profit_sensitivity/*_q10_year1_yield_',yield_factor,'_cprice_1_lprice_',lp,'_discrate_0.1.tif')))
+q50 <- terra::rast(Sys.glob(paste0(input_path, 'profit_sensitivity/*_q50_year1_yield_',yield_factor,'_cprice_1_lprice_',lp,'_discrate_0.1.tif')))
+q90 <- terra::rast(Sys.glob(paste0(input_path, 'profit_sensitivity/*_q90_year1_yield_',yield_factor,'_cprice_1_lprice_',lp,'_discrate_0.1.tif')))
 
 # select variables of interest
 q10 <- c(crop_area, q10[[grep('_return_usha|_gm_usha|_roi_usha', names(q10))]])
@@ -49,14 +52,14 @@ for(crop in names(crop_area)){
   terra::plot(crop_$actual_profit, breaks=c(0,200,400,600, Inf), main=crop)
   # save raster
   names(crop_) <- paste0(crop, '_', names(crop_))
-  terra::writeRaster(crop_, paste0(output_path, 'crop-rasters-final/', crop, '_profit_rasters.tif'), overwrite=T)  
+  terra::writeRaster(crop_, paste0(output_path, 'crop-rasters-final/', crop,'_',lp,'_',yield_factor, '_profit_rasters.tif'), overwrite=T)  
   }
 
 
 
 
 # across crops
-all_crops <- terra::rast(Sys.glob(paste0(output_path, 'crop-rasters-final/*_profit_rasters.tif')))
+all_crops <- terra::rast(Sys.glob(paste0(output_path, 'crop-rasters-final/','*_',lp,'_',yield_factor,'_profit_rasters.tif')))
 
 par(mfrow=c(1,2))
 terra::plot(all_crops$MAIZ_actual_profit, breaks=c(0,200,600,Inf))

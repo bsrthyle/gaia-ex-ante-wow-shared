@@ -13,7 +13,8 @@ source('scripts-3-summaries/# table-functions.R')
 # ------------------------------------------------------------------------------
 
 # set country etc.
-countries_iso <- c("ZMB", "TZA", "NGA", "UGA", "ETH", "KEN", "SLE", "RWA")
+countries_iso <- c("ZMB", "TZA", "NGA", "UGA", "ETH", "KEN", "SLE", "RWA", 'MWI', 'GHA', 'MDG','BDI')
+#countries_iso <- c("KEN")
 select_admin <- c('admin1', 'admin2')
 crop_names <- c(
   "MAIZ",

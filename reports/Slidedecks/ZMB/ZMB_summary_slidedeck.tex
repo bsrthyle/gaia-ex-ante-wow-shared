@@ -10,7 +10,7 @@
         \small\textsc{\insertframetitle}\par
     \end{centering}
 }
-\definecolor{mygreen}{RGB}{118, 188, 33}
+\definecolor{mygreen}{RGB}{0, 128, 128}
 \definecolor{mylightgreen}{RGB}{144,238,144}
 
 \setbeamercolor*{palette primary}{bg=mygreen!70, fg=white}
@@ -21,6 +21,8 @@
 \setbeamercolor{block title}{bg=mygreen, fg=white}
 \setbeamercolor{block body}{bg=mylightgreen, fg=black}
 \setbeamertemplate{title page}[default][rounded=false]
+\setbeamercolor{item}{fg=mygreen}
+\setbeamercolor{frametitle right}{bg=mygreen!60}
 \usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{amsthm}
@@ -99,19 +101,34 @@
 \end{frame}
 
 \section{Introduction}
+\begin{frame}{Introduction}
+    \begin{itemize}
+        \item The slide deck provides a \textbf{data-driven}, \textbf{ex-ante analysis} of soil acidity across \textbf{Zambia}, evaluating the scale of affected areas, potential crop yield impacts, and the expected benefits of lime application for proactive soil remediation.
+        \bigskip
+        \item \textbf{Highlights}:
+        \begin{itemize}
+            \item \textbf{Acidic Cropland}: Identifies regions with high acidity levels impacting crop yields.
+            \item \textbf{Yield Loss}: Quantifies productivity losses in key crops due to acidic soils.
+            \item \textbf{Lime Requirements}: Estimates the lime amounts needed to improve soil health in these areas.
+            \item \textbf{Economic Potential}: Highlights estimated increases in production and production value from lime application.
+        \end{itemize}
+        \bigskip
+        \item Provide policymakers, farmers, and stakeholders with actionable insights to prioritize areas with high potential for productivity gains and economic return from soil remediation.
+    \end{itemize}
+\end{frame}
 \section{Acidic Cropland}
 \subsection*{Top 10 Provinces in Zambia with the highest acidic cropland}
 
 \begin{frame}{Top 10 Provinces in Zambia with the highest acidic cropland}
     \begin{figure}
-    \includegraphics[width=0.95\textwidth]{/Users/bisrathaile/Library/CloudStorage/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_plt_acidic_cropland.png}
+    \includegraphics[width=0.95\textwidth]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_plt_acidic_cropland.png}
     \end{figure}
 \end{frame}
 
 \subsection*{Top 10 Provinces in Zambia with the highest acidic cropland (Percentage of total cropland)}
 \begin{frame}{Top 10 Provinces in Zambia with the highest acidic cropland (Percentage of total cropland)}
     \begin{figure}
-    \includegraphics[width=0.95\textwidth]{/Users/bisrathaile/Library/CloudStorage/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_plt_acidic_cropland_perc.png}
+    \includegraphics[width=0.95\textwidth]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_plt_acidic_cropland_perc.png}
     \end{figure}
 \end{frame}
 
@@ -119,43 +136,46 @@
 \subsection*{Total crop area in the top-10 most acidic Provinces, not segregated by acidic cropland}
 \begin{frame}{Total crop area in the top-10 most acidic Provinces, not segregated by acidic cropland}
     \begin{center}
-        \includegraphics[width=0.95\textwidth]{/Users/bisrathaile/Library/CloudStorage/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_plt_crop_area_acidic.png}
+        \includegraphics[width=0.95\textwidth]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_plt_crop_area_acidic.png}
     \end{center}
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Total crop area in the top-10 most acidic Provinces, not segregated by acidic cropland (table)}
     \scriptsize
-    \input{/Users/bisrathaile/Library/CloudStorage/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_table_crop_area_acidic.tex}
+    \input{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_table_crop_area_acidic.tex}
+\end{frame}
+
+\section{Additional Production}
+\subsection*{Potential for additional production (tone) in top 10 acidic Provinces in Zambia}
+\begin{frame}{Potential for additional production (tone) in top 10 acidic Provinces in Zambia}
+    \begin{figure}
+    \includegraphics[width=0.98\textwidth, height=0.85\textheight]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_plt_additional_production.png}
+    \end{figure}
+\end{frame}
+
+\subsection*{Potential for additional production (tone) in top 10 acidic Provinces in Zambia}
+\begin{frame}{Potential for additional production (1000 tone) in top 10 acidic Provinces in Zambia(Table) }
+    \scriptsize
+    \input{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_table_additional_production.tex}
+\end{frame}
+
+\subsection*{Potential for additional production value (US\$) in top 10 acidic Provinces in Zambia}
+\begin{frame}{Potential for additional production value (US\$) in top 10 acidic Provinces in Zambia}
+    \begin{figure}
+    \includegraphics[width=0.98\textwidth, height=0.85\textheight]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_plt_additional_production_value.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Potential for additional production value (1000 US\$) in top 10 acidic Provinces in Zambia(Table)}
+    \scriptsize
+    \input{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_table_additional_production_value.tex}
 \end{frame}
 
 \section{Yield Loss}
 \subsection*{Yield loss for Maize and Groundnut(\%) in Zambia}
 \begin{frame}{Yield loss due to soil acidity for Maize and Groundnut in Zambia}
     \begin{figure}
-    \includegraphics[width=0.95\textwidth]{/Users/bisrathaile/Library/CloudStorage/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_yield_loss.png}
-    \end{figure}
-\end{frame}
-
-\section{Lime Requirement}
-\subsection*{Lime requirements (t) for acid soil remediation}
-\begin{frame} {Lime requirements (t) for acid soil remediation in Zambia}
-    \begin{figure}
-        \centering
-        \includegraphics[width=0.95\textwidth]{/Users/bisrathaile/Library/CloudStorage/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_plt_lime_requirements.png}
-    \end{figure}
-\end{frame}
-
-\subsection*{Lime requirements (t) for acid soil remediation (table)}
-\begin{frame} {Lime requirements (t) for acid soil remediation in Zambia (table)}
-    \scriptsize
-    \input{/Users/bisrathaile/Library/CloudStorage/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_table_lime_requirements.tex}
-\end{frame}
-
-\subsection*{Lime rate for Maize and Groundnut in Zambia}
-\begin{frame} {Lime rate for Maize and Groundnut in Zambia}
-    \begin{figure}
-        \centering
-        \includegraphics[width=0.98\textwidth]{/Users/bisrathaile/Library/CloudStorage/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_lime_rate.png}
+    \includegraphics[width=0.95\textwidth]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_yield_loss.png}
     \end{figure}
 \end{frame}
 
@@ -164,42 +184,33 @@
 \begin{frame} {Yield response to lime application in Zambia}
     \begin{figure}
         \centering
-        \includegraphics[width=0.98\textwidth]{/Users/bisrathaile/Library/CloudStorage/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_yield_response.png}
+        \includegraphics[width=0.98\textwidth]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_yield_response.png}
     \end{figure}
 \end{frame}
 
-\section{Additional Production}
-\subsection*{Potential for additional production (tone) in top 10 acidic Provinces in Zambia}
-\begin{frame}{Potential for additional production (tone) in top 10 acidic Provinces in Zambia}
-    \begin{figure}
-    \includegraphics[width=0.98\textwidth, height=0.85\textheight]{/Users/bisrathaile/Library/CloudStorage/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_plt_additional_production.png}
-    \end{figure}
-\end{frame}
-
-\subsection*{Potential for additional production value (US\$) in top 10 acidic Provinces in Zambia}
-\begin{frame}{Potential for additional production value (US\$) in top 10 acidic Provinces in Zambia}
-    \begin{figure}
-    \includegraphics[width=0.98\textwidth, height=0.85\textheight]{/Users/bisrathaile/Library/CloudStorage/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_plt_additional_production_value.png}
-    \end{figure}
-\end{frame}
-
-\section{ROI for Lime Application}
-\subsection*{Return on investment for lime application in Zambia}
-\begin{frame} {Return on investment for lime application in Zambia}
+\section{Lime Requirement}
+\subsection*{Lime requirements (t) for acid soil remediation}
+\begin{frame} {Lime requirements (t) for acid soil remediation in Zambia}
     \begin{figure}
         \centering
-        \includegraphics[width=0.98\textwidth]{/Users/bisrathaile/Library/CloudStorage/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_roi.png}
+        \includegraphics[width=0.95\textwidth]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_plt_lime_requirements.png}
     \end{figure}
 \end{frame}
 
-\section{Profitability of Lime Application}
-\subsection*{Profitability of lime application in Zambia}
-\begin{frame} {Profitability of lime application in Zambia}
+\subsection*{Lime requirements (t) for acid soil remediation (table)}
+\begin{frame} {Lime requirements (1000 t) for acid soil remediation in Zambia (table)}
+    \scriptsize
+    \input{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_table_lime_requirements.tex}
+\end{frame}
+
+\subsection*{Lime rate for Maize and Groundnut in Zambia}
+\begin{frame} {Lime rate for Maize and Groundnut in Zambia}
     \begin{figure}
         \centering
-        \includegraphics[width=0.98\textwidth]{/Users/bisrathaile/Library/CloudStorage/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_profit.png}
+        \includegraphics[width=0.98\textwidth]{D:/Dropbox/CIMMYT-WORK/Analysis/bisrat-analysis-workflows/gaia_exante_bisrat/gaia-ex-ante-wow-shared/data-output//figures_and_tables/ZMB//ZMB_lime_rate.png}
     \end{figure}
 \end{frame}
+
 \begin{frame}
 \frametitle{Main assumptions and parameters}
 \small
@@ -212,6 +223,7 @@
     \item Economic benefits from liming are calculated by multiplying the additional yield after soil remediation by median crop prices from sub-Saharan Africa (2016-2020 FAOSTAT data). The cost of liming is calculated using estimated lime application rates and a fixed lime price of 100 US\$/ton.
     \item The benefits of liming are assessed only for the year of application due to a lack of robust, large-scale data on long-term effects in sub-Saharan Africa.
 \end{itemize}
+\centering
 For details, visit \href{www.acidsoils.africa}{www.acidsoils.africa}.
 \end{frame}
 

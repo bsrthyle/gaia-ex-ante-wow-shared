@@ -110,6 +110,7 @@ costs <- function(crop, lime_method, lime_price) {
   # c_subset <- subset(crops_df, spam == crop)
   # lime_tha <- lime_method[[grep(paste0("_", c_subset$ac_sat), names(lime_method))]]
   lime_tha <- lime_method[[crop]]
+  lime_tha[lime_tha >= 4] <- 4
   names(lime_tha) <- paste0(crop, '_lr_tha')
   lime_usha <- lime_tha * lime_price
   names(lime_usha) <- paste0(crop, '_cost_usha')
@@ -245,7 +246,7 @@ profit_calc <- function(profit_type = 'year1',
 # ------------------------------------------------------------------------------
 
 # user defined parameters
-ya <- 1
+ya <- c(1, 2)
 cp <- 1
 lp <- seq(0, 100, 50)
 dr <- 0.1

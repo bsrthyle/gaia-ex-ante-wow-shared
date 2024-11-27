@@ -1,0 +1,105 @@
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{worldflags}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{textcase}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{makecell}
+\usepackage{multirow}
+\usepackage{multicol}
+\definecolor{my-green}{HTML}{7BC142}
+\definecolor{my-orange}{HTML}{B74F20}
+\definecolor{mygreen}{HTML}{6A9E52}
+\hypersetup{
+    %bookmarks=true,         % show bookmarks bar?
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=my-green,          % color of internal links (change box color with linkbordercolor)
+    linkbordercolor=my-green,
+    citecolor=blue,        % color of links to bibliography
+    filecolor=cyan,         % color of file links
+    urlcolor=blue,      % color of external links
+    pdftitle={GAIA:Summary Data on Acid Cropland and Lime Requirements},
+  pdfauthor={Bisrat H. Gebrekidan},
+  pdfcreator={LaTeX via pandoc}
+}
+\usepackage{fouriernc}
+\setbeamertemplate{section in toc}[sections numbered]
+\useinnertheme{rounded}
+\setbeamercolor{item}{fg=my-orange}
+\setbeamerfont{normal text}{family=\rmfamily}
+\setbeamertemplate{itemize items}[triangle]
+\setbeamercolor{itemize item}{fg=my-orange}
+\setbeamercolor{itemize subitem}{fg=my-orange}
+\setbeamercolor{frametitle}{fg=my-orange} % Change title color to blue
+\setbeamertemplate{frametitle}{%
+    \begin{centering} % Center the title
+        %\vspace{2mm} % Optional: Adjust vertical spacing
+        \usebeamercolor[fg]{frametitle} % Use the defined frametitle color
+        \usebeamerfont{frametitle} % Use the defined frametitle font
+        \large\textbf\insertframetitle\par % Insert the frame title
+        \vspace{-2mm} % Optional: Adjust vertical spacing
+    \end{centering}
+}
+% Title information
+\title{\textcolor{my-green}{\textbf\text{Technical Brief:} \\ \textsc{Targeting Agricultural Lime for \\ Acid Croplands in\\ \textcolor{my-orange}{\MakeUppercase{\CountryName}}}}}
+\author{ \href{mailto:b.gebrekidan@cgiar.org}{Bisrat Gebrekidan\textsuperscript{a}},  
+\href{mailto:j.siliva@cgiar.org}{Joao Vasco Silva\textsuperscript{b}}\\,  
+\href{mailto:t.sida@cgiar.org}{Tesfaye Sida\textsuperscript{a}},  
+\href{mailto:frederic.baudron@cirad.fr}{Frédéric Baudron\textsuperscript{c}},
+\href{mailto:s.gameda@cgiar.org}{Samuel Gameda\textsuperscript{a}},\\
+\href{mailto:J.chamberlin@cgiar.org}{Jordan Chamberlin\textsuperscript{d}}}
+\date{November 2024}
+
+
+\newcommand{\CustomTitlePage}{%
+{
+    % Set the background image only for this frame
+    \usebackgroundtemplate{%
+        \includegraphics[width=\paperwidth,height=\paperheight]{\BackgroundImagePath} % Replace 'background.jpg' with your image
+    }
+    \begin{frame}[plain]
+    \begin{tikzpicture}[remember picture, overlay]
+        % Title positioned on the right
+        \node[
+            anchor=north east,
+            align=center,
+            text width=0.7\paperwidth,
+            xshift=0.8cm,
+            yshift=-2.2cm
+        ] at (current page.north east) {
+            \begingroup
+            \setlength{\baselineskip}{20pt} % Adjust line spacing as needed
+            {\fontsize{19pt}{20pt}\selectfont \textbf{\inserttitle}} % Reduced leading
+            \par % Ensure proper paragraph spacing
+            \vspace{1cm} % Adjust spacing between elements
+            \fontsize{10pt}{10pt}\selectfont{\insertauthor}
+            \par
+            \vspace{0.5cm}
+            \small{\insertdate}
+            \par
+            \vspace{0.3cm}
+            \scriptsize\textsuperscript{a} CIMMYT-Ethiopia, \textsuperscript{b} CIMMYT-Zimbabwe, \textsuperscript{c} CIRAD, \textsuperscript{d} CIMMYT-Kenya
+            \endgroup
+        };
+    \end{tikzpicture}
+
+   
+\end{frame}
+}
+}
+% Begin document
+\newcommand{\CustomEndPage}{
+    \usebackgroundtemplate{%
+    \includegraphics[width=0.974\paperwidth,height=0.77\paperheight]{\DashboardImagePath} 
+}
+\begin{frame}[plain]
+    
+    \vspace{8.5cm}
+    \centering
+    \href{https://www.acidsoils.africa/}{\textcolor{mygreen}{\textbf{https://www.acidsoils.africa/}}}  
+
+\end{frame}
+
+}

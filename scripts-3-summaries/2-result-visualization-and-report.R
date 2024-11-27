@@ -4,8 +4,8 @@ library(dplyr)
 
 input_path <- paste0(here::here(), '/data-input/')
 output_path <- paste0(here::here(), '/data-output/')
-countries_iso <- c("ZMB", "TZA", "NGA", "UGA", "ETH", "KEN", "SLE", "RWA")
-
+#countries_iso <- c("ZMB", "TZA", "NGA", "UGA", "ETH", "KEN", "SLE", "RWA", 'MWI', 'GHA')
+country_iso3 <- "KEN"
 source(
   "../gaia-ex-ante-wow-shared/scripts-3-summaries/# result-visualization_functions.R"
 )
